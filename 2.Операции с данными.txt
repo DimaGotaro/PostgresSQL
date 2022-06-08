@@ -1,7 +1,7 @@
-// Операции с данными
-// Добавление данных. Команда Insert
+п»ї// РћРїРµСЂР°С†РёРё СЃ РґР°РЅРЅС‹РјРё
+// Р”РѕР±Р°РІР»РµРЅРёРµ РґР°РЅРЅС‹С…. РљРѕРјР°РЅРґР° Insert
 
-// создали таблицу
+// СЃРѕР·РґР°Р»Рё С‚Р°Р±Р»РёС†Сѓ
 CREATE TABLE Prod
 (
 Id SERIAL PRIMARY KEY,
@@ -11,40 +11,40 @@ ProductCount INTEGER DEFAULT 0,
 Price NUMERIC
 );
 
-// добавление строки
+// РґРѕР±Р°РІР»РµРЅРёРµ СЃС‚СЂРѕРєРё
 INSERT INTO prod VALUES(1, 'POCOX3', 'XIAOMI', 5, 300)
 
-// добавление по столбцам
+// РґРѕР±Р°РІР»РµРЅРёРµ РїРѕ СЃС‚РѕР»Р±С†Р°Рј
 INSERT INTO prod (Manufacturer, Price, ProductName)
 VALUES('Samsung', 500, 'Gelaxi 5');
 
-// добавление нескольких строк
+// РґРѕР±Р°РІР»РµРЅРёРµ РЅРµСЃРєРѕР»СЊРєРёС… СЃС‚СЂРѕРє
 INSERT INTO prod (Manufacturer, Price, ProductName, ProductCount)
 VALUES('Samsung', 650, 'Gelaxi 6', 6)
 VALUES('Samsung', 250, 'Gelaxi 4s', 10);
 
-// Возвращение значений
+// Р’РѕР·РІСЂР°С‰РµРЅРёРµ Р·РЅР°С‡РµРЅРёР№
 INSERT INTO prod (Manufacturer, Price, ProductName, ProductCount)
 VALUES ('Apple', 1000, 'iPhone12', 8) RETURNING id;
-// вернули Id
+// РІРµСЂРЅСѓР»Рё Id
 
-// Получение данных. Команда Select
-SELECT * FROM prod // * - все столбцы
+// РџРѕР»СѓС‡РµРЅРёРµ РґР°РЅРЅС‹С…. РљРѕРјР°РЅРґР° Select
+SELECT * FROM prod // * - РІСЃРµ СЃС‚РѕР»Р±С†С‹
 
-// получение отдельных столбцов
+// РїРѕР»СѓС‡РµРЅРёРµ РѕС‚РґРµР»СЊРЅС‹С… СЃС‚РѕР»Р±С†РѕРІ
 SELECT productname, price FROM prod
 
-// получение значений с условием
+// РїРѕР»СѓС‡РµРЅРёРµ Р·РЅР°С‡РµРЅРёР№ СЃ СѓСЃР»РѕРІРёРµРј
 SELECT productname, price * productcount
 FROM prod
 
 // AS 
-- изменяет название выходного столбца
+- РёР·РјРµРЅСЏРµС‚ РЅР°Р·РІР°РЅРёРµ РІС‹С…РѕРґРЅРѕРіРѕ СЃС‚РѕР»Р±С†Р°
 SELECT productname, price * productcount AS TitSum
 FROM prod
 
-// Фильтрация. WHERE
-// поиск по значению в столбце
+// Р¤РёР»СЊС‚СЂР°С†РёСЏ. WHERE
+// РїРѕРёСЃРє РїРѕ Р·РЅР°С‡РµРЅРёСЋ РІ СЃС‚РѕР»Р±С†Рµ
 SELECT * FROM Prod
 WHERE Manufacturer = 'Samsung';
 
@@ -54,52 +54,52 @@ WHERE price < 600;
 SELECT * FROM Prod
 WHERE ProductCount * price > 3000;
 
-// Логические операторы
+// Р›РѕРіРёС‡РµСЃРєРёРµ РѕРїРµСЂР°С‚РѕСЂС‹
 // AND 
-- все условия верны
+- РІСЃРµ СѓСЃР»РѕРІРёСЏ РІРµСЂРЅС‹
 SELECT * FROM Prod
 WHERE Manufacturer = 'Samsung' AND price > 499;
 
 // OR
-- одно условие верно
+- РѕРґРЅРѕ СѓСЃР»РѕРІРёРµ РІРµСЂРЅРѕ
 SELECT * FROM Prod
 WHERE Manufacturer = 'Samsung' OR price > 499;
 
 SELECT * FROM Prod
-WHERE Manufacturer <> 'Samsung'; // не Samsung
+WHERE Manufacturer <> 'Samsung'; // РЅРµ Samsung
 
 SELECT * FROM Prod
-WHERE NOT Manufacturer = 'Samsung'; // то же
+WHERE NOT Manufacturer = 'Samsung'; // С‚Рѕ Р¶Рµ
 
-// составной
+// СЃРѕСЃС‚Р°РІРЅРѕР№
 SELECT * FROM Prod
 WHERE Manufacturer = 'Samsung' OR (ProductCount > 7 AND price > 500);
 
 // IS NULL 
-- поиск с значением NULL
+- РїРѕРёСЃРє СЃ Р·РЅР°С‡РµРЅРёРµРј NULL
 SELECT * FROM Prod
 WHERE ProductCount IS NULL;
 
-// наоборот
+// РЅР°РѕР±РѕСЂРѕС‚
 SELECT * FROM Prod
 WHERE ProductCount IS NOT NULL;
 
-// Обновление данных. Команда UPDATE
-// +100 к цене
+// РћР±РЅРѕРІР»РµРЅРёРµ РґР°РЅРЅС‹С…. РљРѕРјР°РЅРґР° UPDATE
+// +100 Рє С†РµРЅРµ
 UPDATE prod
 SET price = price + 100;
 
-// изменение с условием
+// РёР·РјРµРЅРµРЅРёРµ СЃ СѓСЃР»РѕРІРёРµРј
 UPDATE prod
 SET Manufacturer = 'Samsung Inc.'
 WHERE manufacturer = 'Samsung';
 
-// изменение нескольких
+// РёР·РјРµРЅРµРЅРёРµ РЅРµСЃРєРѕР»СЊРєРёС…
 UPDATE prod
 SET Manufacturer = 'Samsung Inc.',
 productcount = productcount + 1
 WHERE manufacturer = 'Samsung';
 
-// удаление из таблицы с условием
+// СѓРґР°Р»РµРЅРёРµ РёР· С‚Р°Р±Р»РёС†С‹ СЃ СѓСЃР»РѕРІРёРµРј
 DELETE FROM prod
 WHERE price < 500 AND manufacturer = 'Samsung Inc.';

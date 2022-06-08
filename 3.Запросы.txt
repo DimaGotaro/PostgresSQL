@@ -1,96 +1,96 @@
-// Запросы
-// DICTINCT. Выборка уникальных значений
+п»ї// Р—Р°РїСЂРѕСЃС‹
+// DICTINCT. Р’С‹Р±РѕСЂРєР° СѓРЅРёРєР°Р»СЊРЅС‹С… Р·РЅР°С‡РµРЅРёР№
 
-// все уникальные значения столбца
+// РІСЃРµ СѓРЅРёРєР°Р»СЊРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ СЃС‚РѕР»Р±С†Р°
 SELECT DISTINCT manufacturer FROM prod 
 
-// все значения столбца
+// РІСЃРµ Р·РЅР°С‡РµРЅРёСЏ СЃС‚РѕР»Р±С†Р°
 SELECT manufacturer FROM prod
 
-// ORDER BY. Сортировка. По возрастанию
+// ORDER BY. РЎРѕСЂС‚РёСЂРѕРІРєР°. РџРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ
 
-// сортировка по значениям столбца
+// СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕ Р·РЅР°С‡РµРЅРёСЏРј СЃС‚РѕР»Р±С†Р°
 SELECT * FROM prod
 ORDER BY price
 
-// сортировка условия при вызове столбца
+// СЃРѕСЂС‚РёСЂРѕРІРєР° СѓСЃР»РѕРІРёСЏ РїСЂРё РІС‹Р·РѕРІРµ СЃС‚РѕР»Р±С†Р°
 SELECT productname, productcount * price AS titsum
 FROM prod
 ORDER BY titsum
 
-// сортировка по условию
+// СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕ СѓСЃР»РѕРІРёСЋ
 SELECT productname, productcount, price
 FROM prod
 ORDER BY productcount * price
 
-// сортировка по убыванию
+// СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕ СѓР±С‹РІР°РЅРёСЋ
 SELECT productname, productcount, price
 FROM prod
 ORDER BY productcount * price DESC
 
-// сортировка по возрастанию
+// СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕ РІРѕР·СЂР°СЃС‚Р°РЅРёСЋ
 SELECT productname, productcount, price
 FROM prod
 ORDER BY productcount * price ASC
 
-// сортировка по нескольким столбцам
+// СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕ РЅРµСЃРєРѕР»СЊРєРёРј СЃС‚РѕР»Р±С†Р°Рј
 SELECT productname, productcount, price
 FROM prod
 ORDER BY productcount, price
 
-// Получение диапазона строк. LIMIT и OFFSET
+// РџРѕР»СѓС‡РµРЅРёРµ РґРёР°РїР°Р·РѕРЅР° СЃС‚СЂРѕРє. LIMIT Рё OFFSET
 
 // LIMIT
-// вывести 2 строки во всех столбцах
+// РІС‹РІРµСЃС‚Рё 2 СЃС‚СЂРѕРєРё РІРѕ РІСЃРµС… СЃС‚РѕР»Р±С†Р°С…
 SELECT *
 FROM prod
 LIMIT 2
 
 // OFFSET 
-- начальное значение строки
-// c 2 строки вывести 2 строки
+- РЅР°С‡Р°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ СЃС‚СЂРѕРєРё
+// c 2 СЃС‚СЂРѕРєРё РІС‹РІРµСЃС‚Рё 2 СЃС‚СЂРѕРєРё
 SELECT *
 FROM prod
 OFFSET 2
 LIMIT 2
 
-// вывести все ничиная со второй
+// РІС‹РІРµСЃС‚Рё РІСЃРµ РЅРёС‡РёРЅР°СЏ СЃРѕ РІС‚РѕСЂРѕР№
 SELECT *
 FROM prod
 OFFSET 2
 
-// Операторы фильтрации
+// РћРїРµСЂР°С‚РѕСЂС‹ С„РёР»СЊС‚СЂР°С†РёРё
 
-// Оператор IN
-// вывести с разными значениями в столбце
+// РћРїРµСЂР°С‚РѕСЂ IN
+// РІС‹РІРµСЃС‚Рё СЃ СЂР°Р·РЅС‹РјРё Р·РЅР°С‡РµРЅРёСЏРјРё РІ СЃС‚РѕР»Р±С†Рµ
 SELECT * FROM prod
 WHERE manufacturer IN('Samsung Inc.', 'XIAOMI')
 
-// не соответствует значениям в столбце
+// РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ Р·РЅР°С‡РµРЅРёСЏРј РІ СЃС‚РѕР»Р±С†Рµ
 SELECT * FROM prod
 WHERE manufacturer NOT IN('Samsung Inc.', 'XIAOMI')
 
-// Оператор BETWEEN
-// вывести 400 до 800 в столбце 
+// РћРїРµСЂР°С‚РѕСЂ BETWEEN
+// РІС‹РІРµСЃС‚Рё 400 РґРѕ 800 РІ СЃС‚РѕР»Р±С†Рµ 
 SELECT * FROM prod
 WHERE price BETWEEN 400 AND 800
 
-// вывести с условием
+// РІС‹РІРµСЃС‚Рё СЃ СѓСЃР»РѕРІРёРµРј
 SELECT * FROM prod
 WHERE price * productcount BETWEEN 3000 AND 10000
 
-// Оператор LIKE
-// вывести совпадения по шаблону строки, 'Gel%' и символы
+// РћРїРµСЂР°С‚РѕСЂ LIKE
+// РІС‹РІРµСЃС‚Рё СЃРѕРІРїР°РґРµРЅРёСЏ РїРѕ С€Р°Р±Р»РѕРЅСѓ СЃС‚СЂРѕРєРё, 'Gel%' Рё СЃРёРјРІРѕР»С‹
 SELECT * FROM prod
 WHERE productname LIKE 'Gel%'
 
-// вывести совпадения по шаблону строки, 'Gelaxi _' и один символ
+// РІС‹РІРµСЃС‚Рё СЃРѕРІРїР°РґРµРЅРёСЏ РїРѕ С€Р°Р±Р»РѕРЅСѓ СЃС‚СЂРѕРєРё, 'Gelaxi _' Рё РѕРґРёРЅ СЃРёРјРІРѕР»
 SELECT * FROM prod
 WHERE productname LIKE 'Gelaxi _'
 
-// Агрегатные функции
+// РђРіСЂРµРіР°С‚РЅС‹Рµ С„СѓРЅРєС†РёРё
 
-// добавим таблицу
+// РґРѕР±Р°РІРёРј С‚Р°Р±Р»РёС†Сѓ
 CREATE TABLE Prod2
 (
 Id SERIAL PRIMARY KEY,
@@ -101,7 +101,7 @@ Price NUMERIC DEFAULT 0,
 IsDisc BOOLEAN
 );
 
-// добавим строки
+// РґРѕР±Р°РІРёРј СЃС‚СЂРѕРєРё
 INSERT INTO prod2 (Company, ProductName, ProductCount, Price, IsDisc)
 VALUES 
 ('XIAOMI', 'Redmi 3', 5, 250, true),
@@ -111,100 +111,100 @@ VALUES
 ('APPLE', 'iPhone 12', 8, 500, true),
 ('LENOVO', 'Asus 2r', 6, 800, false);
 
-// выведем среднее значение всех price и назовём столбец вывода 
+// РІС‹РІРµРґРµРј СЃСЂРµРґРЅРµРµ Р·РЅР°С‡РµРЅРёРµ РІСЃРµС… price Рё РЅР°Р·РѕРІС‘Рј СЃС‚РѕР»Р±РµС† РІС‹РІРѕРґР° 
 SELECT AVG(price) AS sred_price FROM prod2
 
-// среднее с фильтрацией по значениям в столбце
+// СЃСЂРµРґРЅРµРµ СЃ С„РёР»СЊС‚СЂР°С†РёРµР№ РїРѕ Р·РЅР°С‡РµРЅРёСЏРј РІ СЃС‚РѕР»Р±С†Рµ
 SELECT AVG(price) AS sred_price FROM prod2
 WHERE company = 'Samsung';
 
-// среднее с бинарной операцией
+// СЃСЂРµРґРЅРµРµ СЃ Р±РёРЅР°СЂРЅРѕР№ РѕРїРµСЂР°С†РёРµР№
 SELECT AVG(price * productcount) AS sred_price FROM prod2
 
 // Count
-// вывести кол-во строк
+// РІС‹РІРµСЃС‚Рё РєРѕР»-РІРѕ СЃС‚СЂРѕРє
 SELECT COUNT(*) FROM prod2
 
-// вывести уникальные значения из строки, игнорирует NULL
+// РІС‹РІРµСЃС‚Рё СѓРЅРёРєР°Р»СЊРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ РёР· СЃС‚СЂРѕРєРё, РёРіРЅРѕСЂРёСЂСѓРµС‚ NULL
 SELECT COUNT(DISTINCT company) FROM prod2
 
-// Min и Max
+// Min Рё Max
 
-// вывести минимальное значение в строке
+// РІС‹РІРµСЃС‚Рё РјРёРЅРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РІ СЃС‚СЂРѕРєРµ
 SELECT MIN(price) FROM prod2;
 
-// вывести максимальное значение в строке
+// РІС‹РІРµСЃС‚Рё РјР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РІ СЃС‚СЂРѕРєРµ
 SELECT MAX(price) FROM prod2;
 
 // Sum
 
-//сумма в столбце
+//СЃСѓРјРјР° РІ СЃС‚РѕР»Р±С†Рµ
 SELECT SUM(price) FROM prod2;
 
-// сумма с операцией
+// СЃСѓРјРјР° СЃ РѕРїРµСЂР°С†РёРµР№
 SELECT SUM(price * productcount) FROM prod2;
 
-// BOOL_AND и BOOL_OR
+// BOOL_AND Рё BOOL_OR
 
-// хотя бы одно значение в столбце = true
+// С…РѕС‚СЏ Р±С‹ РѕРґРЅРѕ Р·РЅР°С‡РµРЅРёРµ РІ СЃС‚РѕР»Р±С†Рµ = true
 SELECT BOOL_OR(isdisc) FROM prod2;
 
-// true - если все значения true
+// true - РµСЃР»Рё РІСЃРµ Р·РЅР°С‡РµРЅРёСЏ true
 SELECT BOOL_AND(isdisc) FROM prod2;
 
 // STRING_AGG
 
-// вывод всех строковых значений
+// РІС‹РІРѕРґ РІСЃРµС… СЃС‚СЂРѕРєРѕРІС‹С… Р·РЅР°С‡РµРЅРёР№
 SELECT STRING_AGG(productname, ', ') FROM prod2;
 
-// вывод всех уникальных строковых значений
+// РІС‹РІРѕРґ РІСЃРµС… СѓРЅРёРєР°Р»СЊРЅС‹С… СЃС‚СЂРѕРєРѕРІС‹С… Р·РЅР°С‡РµРЅРёР№
 SELECT STRING_AGG(DISTINCT company, ', ') FROM prod2;
 
-// несколько
+// РЅРµСЃРєРѕР»СЊРєРѕ
 SELECT
 COUNT(*),
 MIN(price) AS MinPrice,
 SUM(productcount) AS SumPR
 FROM prod2;
 
-// Группировка
+// Р“СЂСѓРїРїРёСЂРѕРІРєР°
 
 // GROUP BY
 
-// группировка по одинаковым значениям столбца, и вывод кол-ва
-сгрупированных элементов у каждой группировки
+// РіСЂСѓРїРїРёСЂРѕРІРєР° РїРѕ РѕРґРёРЅР°РєРѕРІС‹Рј Р·РЅР°С‡РµРЅРёСЏРј СЃС‚РѕР»Р±С†Р°, Рё РІС‹РІРѕРґ РєРѕР»-РІР°
+СЃРіСЂСѓРїРёСЂРѕРІР°РЅРЅС‹С… СЌР»РµРјРµРЅС‚РѕРІ Сѓ РєР°Р¶РґРѕР№ РіСЂСѓРїРїРёСЂРѕРІРєРё
 SELECT company, COUNT(*) AS ModL
 FROM prod2
 GROUP BY company;
 
-// группировка по нескольким столбцам
+// РіСЂСѓРїРїРёСЂРѕРІРєР° РїРѕ РЅРµСЃРєРѕР»СЊРєРёРј СЃС‚РѕР»Р±С†Р°Рј
 SELECT company, productcount, COUNT(*) AS ModL
 FROM prod2
 GROUP BY company, productcount;
 
-// группировка после условия и сортировка по ModL
+// РіСЂСѓРїРїРёСЂРѕРІРєР° РїРѕСЃР»Рµ СѓСЃР»РѕРІРёСЏ Рё СЃРѕСЂС‚РёСЂРѕРІРєР° РїРѕ ModL
 SELECT company, COUNT(*) AS ModL
 FROM prod2
 WHERE price > 100
 GROUP BY company
 ORDER BY ModL DESC;
 
-// Фильтрация групп. HAVING
+// Р¤РёР»СЊС‚СЂР°С†РёСЏ РіСЂСѓРїРї. HAVING
 
-// условия для сгрупперованных данных
+// СѓСЃР»РѕРІРёСЏ РґР»СЏ СЃРіСЂСѓРїРїРµСЂРѕРІР°РЅРЅС‹С… РґР°РЅРЅС‹С…
 SELECT company, COUNT(*) AS ModL
 FROM prod2
 GROUP BY company
 HAVING COUNT(*) > 1;
 
-// условие до группировки и для сгруппированных данных
+// СѓСЃР»РѕРІРёРµ РґРѕ РіСЂСѓРїРїРёСЂРѕРІРєРё Рё РґР»СЏ СЃРіСЂСѓРїРїРёСЂРѕРІР°РЅРЅС‹С… РґР°РЅРЅС‹С…
 SELECT company, COUNT(*) AS ModL
 FROM prod2
 WHERE price > 200
 GROUP BY company
 HAVING COUNT(*) > 1;
 
-// условие до группировки, после, и сортировка результата
+// СѓСЃР»РѕРІРёРµ РґРѕ РіСЂСѓРїРїРёСЂРѕРІРєРё, РїРѕСЃР»Рµ, Рё СЃРѕСЂС‚РёСЂРѕРІРєР° СЂРµР·СѓР»СЊС‚Р°С‚Р°
 SELECT company, COUNT(*) AS ModL
 FROM prod2
 WHERE price > 200
@@ -212,7 +212,7 @@ GROUP BY company
 HAVING COUNT(*) > 1
 ORDER BY ModL DESC;
 
-// то же + вывести сумму столбца сгрупперованных данных
+// С‚Рѕ Р¶Рµ + РІС‹РІРµСЃС‚Рё СЃСѓРјРјСѓ СЃС‚РѕР»Р±С†Р° СЃРіСЂСѓРїРїРµСЂРѕРІР°РЅРЅС‹С… РґР°РЅРЅС‹С…
 SELECT company, COUNT(*) AS ModL, SUM(productcount) AS Uni
 FROM prod2
 WHERE price > 200
@@ -220,23 +220,23 @@ GROUP BY company
 HAVING COUNT(*) > 1
 ORDER BY ModL DESC;
 
-// GROUPING SETS, CUBE и ROLLUP
+// GROUPING SETS, CUBE Рё ROLLUP
 
 // GROUPING SETS
 
-// группировка по нескольким столбцам отдельно от каждого
+// РіСЂСѓРїРїРёСЂРѕРІРєР° РїРѕ РЅРµСЃРєРѕР»СЊРєРёРј СЃС‚РѕР»Р±С†Р°Рј РѕС‚РґРµР»СЊРЅРѕ РѕС‚ РєР°Р¶РґРѕРіРѕ
 SELECT company, COUNT(*) AS ModL, productcount
 FROM prod2
 GROUP BY GROUPING SETS(company, productcount);
 
 // ROLLUP
 
-// добавляет суммирующую строку ко всей таблице
+// РґРѕР±Р°РІР»СЏРµС‚ СЃСѓРјРјРёСЂСѓСЋС‰СѓСЋ СЃС‚СЂРѕРєСѓ РєРѕ РІСЃРµР№ С‚Р°Р±Р»РёС†Рµ
 SELECT company, COUNT(*) AS ModL, SUM(price)
 FROM prod2
 GROUP BY ROLLUP(company);
 
-// при сортировке в конце каждой группы сумма значений группы
+// РїСЂРё СЃРѕСЂС‚РёСЂРѕРІРєРµ РІ РєРѕРЅС†Рµ РєР°Р¶РґРѕР№ РіСЂСѓРїРїС‹ СЃСѓРјРјР° Р·РЅР°С‡РµРЅРёР№ РіСЂСѓРїРїС‹
 SELECT company, COUNT(*) AS ModL, SUM(productcount)
 FROM prod2
 GROUP BY ROLLUP(company, productcount)
@@ -244,14 +244,14 @@ ORDER BY company;
 
 // CUBE
 
-// сумма для каждой комбинации групп
+// СЃСѓРјРјР° РґР»СЏ РєР°Р¶РґРѕР№ РєРѕРјР±РёРЅР°С†РёРё РіСЂСѓРїРї
 SELECT company, COUNT(*) AS ModL, SUM(productcount)
 FROM prod2
 GROUP BY CUBE(company, productcount);
 
-// Подзапросы
+// РџРѕРґР·Р°РїСЂРѕСЃС‹
 
-// создадим таблицы, связанные по столбцам
+// СЃРѕР·РґР°РґРёРј С‚Р°Р±Р»РёС†С‹, СЃРІСЏР·Р°РЅРЅС‹Рµ РїРѕ СЃС‚РѕР»Р±С†Р°Рј
 CREATE TABLE Prod2
 (
 Id SERIAL PRIMARY KEY,
@@ -274,7 +274,7 @@ ProdyctCount INTEGER DEFAULT 1,
 Price NUMERIC NOT NULL
 );
 
-// добавим данные
+// РґРѕР±Р°РІРёРј РґР°РЅРЅС‹Рµ
 INSERT INTO prod2 (Company, ProductName, ProductCount, Price, IsDisc)
 VALUES 
 ('XIAOMI', 'Redmi 3', 5, 250, true),
@@ -312,25 +312,25 @@ VALUES
   (SELECT price FROM prod2 WHERE productname = 'iPhone 12')
 );
 
-// вывести строку с минимальной ценой
+// РІС‹РІРµСЃС‚Рё СЃС‚СЂРѕРєСѓ СЃ РјРёРЅРёРјР°Р»СЊРЅРѕР№ С†РµРЅРѕР№
 SELECT * FROM prod2
 WHERE price = (SELECT MIN(price) FROM prod2)
 
-// вывести строки с ценой больше чем средняя
+// РІС‹РІРµСЃС‚Рё СЃС‚СЂРѕРєРё СЃ С†РµРЅРѕР№ Р±РѕР»СЊС€Рµ С‡РµРј СЃСЂРµРґРЅСЏСЏ
 SELECT * FROM prod2
 WHERE price > (SELECT AVG(price) FROM prod2);
 
-// Коррелирующие подзапросы
+// РљРѕСЂСЂРµР»РёСЂСѓСЋС‰РёРµ РїРѕРґР·Р°РїСЂРѕСЃС‹
 
-// вывести значения которые соответствуют дргим значениям
-по внешнему ключу
+// РІС‹РІРµСЃС‚Рё Р·РЅР°С‡РµРЅРёСЏ РєРѕС‚РѕСЂС‹Рµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‚ РґСЂРіРёРј Р·РЅР°С‡РµРЅРёСЏРј
+РїРѕ РІРЅРµС€РЅРµРјСѓ РєР»СЋС‡Сѓ
 SELECT createat, price,
 (SELECT productname FROM prod2
 WHERE orders.pokypid = prod2.id)
 FROM orders;
 
-// вывести товары стоимость которых выше среднего у определённого
-производителя
+// РІС‹РІРµСЃС‚Рё С‚РѕРІР°СЂС‹ СЃС‚РѕРёРјРѕСЃС‚СЊ РєРѕС‚РѕСЂС‹С… РІС‹С€Рµ СЃСЂРµРґРЅРµРіРѕ Сѓ РѕРїСЂРµРґРµР»С‘РЅРЅРѕРіРѕ
+РїСЂРѕРёР·РІРѕРґРёС‚РµР»СЏ
 SELECT productname, price, company,
 (SELECT AVG(price) FROM prod2 AS Sprod
 WHERE Sprod.company = prod2.company)
@@ -339,10 +339,10 @@ WHERE price >
 (SELECT AVG(price) FROM prod2 AS Sprod
 WHERE Sprod.company = prod2.company);
 
-// Составные типы данных
-// Массивы
+// РЎРѕСЃС‚Р°РІРЅС‹Рµ С‚РёРїС‹ РґР°РЅРЅС‹С…
+// РњР°СЃСЃРёРІС‹
 
-// создадим таблицу с массивом
+// СЃРѕР·РґР°РґРёРј С‚Р°Р±Р»РёС†Сѓ СЃ РјР°СЃСЃРёРІРѕРј
 CREATE TABLE mass
 (
   Id SERIAL PRIMARY KEY,
@@ -351,37 +351,37 @@ CREATE TABLE mass
   massive VARCHAR(10)[]
 );
 
-// добавим данные
+// РґРѕР±Р°РІРёРј РґР°РЅРЅС‹Рµ
 INSERT INTO mass(title, body, massive)
 VALUES ('Paaf', 'Jpoef', '{"sql", "postgres", "course"}');
 
-// выведем массив
+// РІС‹РІРµРґРµРј РјР°СЃСЃРёРІ
 SELECT massive FROM mass;
 
-// выведем элемент массива
+// РІС‹РІРµРґРµРј СЌР»РµРјРµРЅС‚ РјР°СЃСЃРёРІР°
 SELECT massive[3] FROM mass;
 
-// удалить все элементы из массива
+// СѓРґР°Р»РёС‚СЊ РІСЃРµ СЌР»РµРјРµРЅС‚С‹ РёР· РјР°СЃСЃРёРІР°
 update mass 
 set massive='{}'
 where id=1;
 
-// установим элементы массива
+// СѓСЃС‚Р°РЅРѕРІРёРј СЌР»РµРјРµРЅС‚С‹ РјР°СЃСЃРёРІР°
 update mass
 set massive='{sql2, postgres2, frg}'
 where id=1;
 
-// установим конкретный элемент массива
+// СѓСЃС‚Р°РЅРѕРІРёРј РєРѕРЅРєСЂРµС‚РЅС‹Р№ СЌР»РµРјРµРЅС‚ РјР°СЃСЃРёРІР°
 update mass
 set massive[1]='sql3'
 where id=1;
 
-// Перечисления enum
+// РџРµСЂРµС‡РёСЃР»РµРЅРёСЏ enum
 
-// создадим перечисление(тип столбца в будущем)
+// СЃРѕР·РґР°РґРёРј РїРµСЂРµС‡РёСЃР»РµРЅРёРµ(С‚РёРї СЃС‚РѕР»Р±С†Р° РІ Р±СѓРґСѓС‰РµРј)
 CREATE TYPE perechsl AS ENUM ('bgin', 'approwd', 'finish');
 
-// создадим таблицу с столбцом типа перечисления
+// СЃРѕР·РґР°РґРёРј С‚Р°Р±Р»РёС†Сѓ СЃ СЃС‚РѕР»Р±С†РѕРј С‚РёРїР° РїРµСЂРµС‡РёСЃР»РµРЅРёСЏ
 CREATE TABLE ENAM
 (
 Id SERIAL PRIMARY KEY,
@@ -389,31 +389,31 @@ soderj VARCHAR(20),
 status perechsl
 );
 
-// добавим данные, в типе perechsl могут быть только значения
-указанные нами
+// РґРѕР±Р°РІРёРј РґР°РЅРЅС‹Рµ, РІ С‚РёРїРµ perechsl РјРѕРіСѓС‚ Р±С‹С‚СЊ С‚РѕР»СЊРєРѕ Р·РЅР°С‡РµРЅРёСЏ
+СѓРєР°Р·Р°РЅРЅС‹Рµ РЅР°РјРё
 INSERT INTO enam(soderj, status)
 VALUES ('jfkdi', 'approwd'),
 ('544df', 'bgin')
 
-// изменим значение перечисления в таблице
+// РёР·РјРµРЅРёРј Р·РЅР°С‡РµРЅРёРµ РїРµСЂРµС‡РёСЃР»РµРЅРёСЏ РІ С‚Р°Р±Р»РёС†Рµ
 update enam
 set status ='finish'
 where id=2;
 
-// добавим в перечисления значение
+// РґРѕР±Р°РІРёРј РІ РїРµСЂРµС‡РёСЃР»РµРЅРёСЏ Р·РЅР°С‡РµРЅРёРµ
 update enam
 set status ='finish'
 where id=2;
 
-// добавим значение в перечисление
+// РґРѕР±Р°РІРёРј Р·РЅР°С‡РµРЅРёРµ РІ РїРµСЂРµС‡РёСЃР»РµРЅРёРµ
 ALTER TYPE perechsl ADD VALUE 'porebric';
 
-// создадим новое перечисление с новым значением
+// СЃРѕР·РґР°РґРёРј РЅРѕРІРѕРµ РїРµСЂРµС‡РёСЃР»РµРЅРёРµ СЃ РЅРѕРІС‹Рј Р·РЅР°С‡РµРЅРёРµРј
 CREATE TYPE newperec2 AS ENUM ('finish', 'approwd', 'done');
 
-// укажем таблице, чтобы она использовала новое перечисление
+// СѓРєР°Р¶РµРј С‚Р°Р±Р»РёС†Рµ, С‡С‚РѕР±С‹ РѕРЅР° РёСЃРїРѕР»СЊР·РѕРІР°Р»Р° РЅРѕРІРѕРµ РїРµСЂРµС‡РёСЃР»РµРЅРёРµ
 ALTER TABLE enam ALTER COLUMN status TYPE newperec2
 USING status::TEXT::newperec2;
 
-// удалим перечисление
+// СѓРґР°Р»РёРј РїРµСЂРµС‡РёСЃР»РµРЅРёРµ
 DROP TYPE perechsl;

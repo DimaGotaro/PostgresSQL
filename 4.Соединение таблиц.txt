@@ -1,6 +1,6 @@
-// Неявное соединение таблиц
+п»ї// РќРµСЏРІРЅРѕРµ СЃРѕРµРґРёРЅРµРЅРёРµ С‚Р°Р±Р»РёС†
 
-// создадим таблицы, связанные по столбцам
+// СЃРѕР·РґР°РґРёРј С‚Р°Р±Р»РёС†С‹, СЃРІСЏР·Р°РЅРЅС‹Рµ РїРѕ СЃС‚РѕР»Р±С†Р°Рј
 CREATE TABLE Prod2
 (
 Id SERIAL PRIMARY KEY,
@@ -23,7 +23,7 @@ ProdyctCount INTEGER DEFAULT 1,
 Price NUMERIC NOT NULL
 );
 
-// добавим данные
+// РґРѕР±Р°РІРёРј РґР°РЅРЅС‹Рµ
 INSERT INTO prod2 (Company, ProductName, ProductCount, Price, IsDisc)
 VALUES 
 ('XIAOMI', 'Redmi 3', 5, 250, true),
@@ -61,42 +61,42 @@ VALUES
   (SELECT price FROM prod2 WHERE productname = 'iPhone 12')
 );
 
-// объеденм две таблицы
+// РѕР±СЉРµРґРµРЅРј РґРІРµ С‚Р°Р±Р»РёС†С‹
 SELECT * FROM orders, pokyp
 
-// объеденим таблицы по внешнему ключу
+// РѕР±СЉРµРґРµРЅРёРј С‚Р°Р±Р»РёС†С‹ РїРѕ РІРЅРµС€РЅРµРјСѓ РєР»СЋС‡Сѓ
 SELECT * FROM orders, pokyp
 WHERE orders.pokypid = pokyp.id;
 
-// выведем данные по соответствию внешнему ключу
+// РІС‹РІРµРґРµРј РґР°РЅРЅС‹Рµ РїРѕ СЃРѕРѕС‚РІРµС‚СЃС‚РІРёСЋ РІРЅРµС€РЅРµРјСѓ РєР»СЋС‡Сѓ
 SELECT pokyp.firstname, prod2.productname, orders.createat
 FROM pokyp, prod2, orders
 WHERE orders.pokypid = pokyp.id AND orders.productid = prod2.id;
 
-// можно сократить 
+// РјРѕР¶РЅРѕ СЃРѕРєСЂР°С‚РёС‚СЊ 
 SELECT P.firstname, D.productname, O.createat
 FROM pokyp AS P, prod2 AS D, orders AS O
 WHERE O.pokypid = P.id AND O.productid = D.id;
 
-// выведем в совместный результат все столбцы из таблицы
+// РІС‹РІРµРґРµРј РІ СЃРѕРІРјРµСЃС‚РЅС‹Р№ СЂРµР·СѓР»СЊС‚Р°С‚ РІСЃРµ СЃС‚РѕР»Р±С†С‹ РёР· С‚Р°Р±Р»РёС†С‹
 SELECT P.firstname, D.productname, O.*
 FROM pokyp AS P, prod2 AS D, orders AS O
 WHERE O.pokypid = P.id AND O.productid = D.id;
 
 // INNER JOIN
 
-// соеденили две таблицы с условием
+// СЃРѕРµРґРµРЅРёР»Рё РґРІРµ С‚Р°Р±Р»РёС†С‹ СЃ СѓСЃР»РѕРІРёРµРј
 SELECT orders.createat, orders.prodyctcount, prod2.productname
 FROM orders
 JOIN prod2 ON prod2.id = orders.productid
 
-// сократим код
+// СЃРѕРєСЂР°С‚РёРј РєРѕРґ
 SELECT G.createat, G.prodyctcount, F.productname
 FROM orders AS G
 JOIN prod2 AS F ON F.id = G.productid
 
-// соеденим 3 таблицы с условием соединения, и условием
-вывода, и сортировки
+// СЃРѕРµРґРµРЅРёРј 3 С‚Р°Р±Р»РёС†С‹ СЃ СѓСЃР»РѕРІРёРµРј СЃРѕРµРґРёРЅРµРЅРёСЏ, Рё СѓСЃР»РѕРІРёРµРј
+РІС‹РІРѕРґР°, Рё СЃРѕСЂС‚РёСЂРѕРІРєРё
 SELECT orders.createat, prod2.productname, pokyp.firstname
 FROM orders
 JOIN prod2 ON prod2.id = orders.productid
@@ -104,16 +104,16 @@ JOIN pokyp ON pokyp.id = orders.pokypid
 WHERE prod2.price > 450
 ORDER BY pokyp.firstname;
 
-// то же с доп условием
+// С‚Рѕ Р¶Рµ СЃ РґРѕРї СѓСЃР»РѕРІРёРµРј
 SELECT orders.createat, prod2.productname, pokyp.firstname
 FROM orders
 JOIN prod2 ON prod2.id = orders.productid AND prod2.company = 'XIAOMI'
 JOIN pokyp ON pokyp.id = orders.pokypid
 ORDER BY pokyp.firstname;
 
-// OUTER JOIN и CROSS JOIN
+// OUTER JOIN Рё CROSS JOIN
 
-// добавим строку в таблицу
+// РґРѕР±Р°РІРёРј СЃС‚СЂРѕРєСѓ РІ С‚Р°Р±Р»РёС†Сѓ
 INSERT INTO orders(productid, pokypid, createat, prodyctcount, price)
 VALUES
 (
@@ -124,41 +124,41 @@ VALUES
   (SELECT price FROM prod2 WHERE productname = 'Galaxu 5')
 );
 
-// вывод сначала строк из первой(левой) таблицы
+// РІС‹РІРѕРґ СЃРЅР°С‡Р°Р»Р° СЃС‚СЂРѕРє РёР· РїРµСЂРІРѕР№(Р»РµРІРѕР№) С‚Р°Р±Р»РёС†С‹
 SELECT createat, price, firstname
-FROM orders // левая
+FROM orders // Р»РµРІР°СЏ
 LEFT JOIN pokyp ON pokyp.id = orders.pokypid;
 
-// добавим покупателя
+// РґРѕР±Р°РІРёРј РїРѕРєСѓРїР°С‚РµР»СЏ
 INSERT INTO pokyp(firstname) VALUES('Biba');
 
-// LEFT JOIN - таблицы соеденяются не строго(строки из побочной
-таблицы не прошедшие условие добавятся к основной(левой при LEFT))
+// LEFT JOIN - С‚Р°Р±Р»РёС†С‹ СЃРѕРµРґРµРЅСЏСЋС‚СЃСЏ РЅРµ СЃС‚СЂРѕРіРѕ(СЃС‚СЂРѕРєРё РёР· РїРѕР±РѕС‡РЅРѕР№
+С‚Р°Р±Р»РёС†С‹ РЅРµ РїСЂРѕС€РµРґС€РёРµ СѓСЃР»РѕРІРёРµ РґРѕР±Р°РІСЏС‚СЃСЏ Рє РѕСЃРЅРѕРІРЅРѕР№(Р»РµРІРѕР№ РїСЂРё LEFT))
 
-// выведем таблицы,выбираем основную таблицу левую(первую, pokyp),
-а к ней добавляются строки из других таблиц(orders), которые
-не соответствуют условию
+// РІС‹РІРµРґРµРј С‚Р°Р±Р»РёС†С‹,РІС‹Р±РёСЂР°РµРј РѕСЃРЅРѕРІРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ Р»РµРІСѓСЋ(РїРµСЂРІСѓСЋ, pokyp),
+Р° Рє РЅРµР№ РґРѕР±Р°РІР»СЏСЋС‚СЃСЏ СЃС‚СЂРѕРєРё РёР· РґСЂСѓРіРёС… С‚Р°Р±Р»РёС†(orders), РєРѕС‚РѕСЂС‹Рµ
+РЅРµ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‚ СѓСЃР»РѕРІРёСЋ
 SELECT createat, price, firstname
 FROM pokyp LEFT JOIN orders
 ON pokyp.id = orders.pokypid;
 
-// сделаем основной правую(вторую) таблицу
+// СЃРґРµР»Р°РµРј РѕСЃРЅРѕРІРЅРѕР№ РїСЂР°РІСѓСЋ(РІС‚РѕСЂСѓСЋ) С‚Р°Р±Р»РёС†Сѓ
 SELECT createat, price, firstname
 FROM orders RIGHT JOIN pokyp
 ON pokyp.id = orders.pokypid;
 
-// объеденим все таблицы без основной
+// РѕР±СЉРµРґРµРЅРёРј РІСЃРµ С‚Р°Р±Р»РёС†С‹ Р±РµР· РѕСЃРЅРѕРІРЅРѕР№
 SELECT createat, price, firstname
 FROM pokyp FULL JOIN orders
 ON pokyp.id = orders.pokypid;
 
-// соеденим три таблицы
+// СЃРѕРµРґРµРЅРёРј С‚СЂРё С‚Р°Р±Р»РёС†С‹
 SELECT createat, firstname, company
 FROM pokyp
 LEFT JOIN orders ON pokyp.id = orders.pokypid
 LEFT JOIN prod2 ON prod2.id = orders.productid;
 
-// с условием вывода и сортировкой
+// СЃ СѓСЃР»РѕРІРёРµРј РІС‹РІРѕРґР° Рё СЃРѕСЂС‚РёСЂРѕРІРєРѕР№
 SELECT createat, firstname, company
 FROM pokyp
 LEFT JOIN orders ON pokyp.id = orders.pokypid
@@ -166,40 +166,40 @@ LEFT JOIN prod2 ON prod2.id = orders.productid
 WHERE prod2.price > 500
 ORDER BY orders.createat;
 
-// выведем покупателя у которого значение orders.pokypid = NULL
+// РІС‹РІРµРґРµРј РїРѕРєСѓРїР°С‚РµР»СЏ Сѓ РєРѕС‚РѕСЂРѕРіРѕ Р·РЅР°С‡РµРЅРёРµ orders.pokypid = NULL
 SELECT firstname FROM pokyp
 LEFT JOIN orders ON pokyp.id = orders.pokypid
 WHERE orders.pokypid IS NULL;
 
-// совместно
+// СЃРѕРІРјРµСЃС‚РЅРѕ
 SELECT firstname, createat, productname FROM orders
 JOIN prod2 ON prod2.id = orders.productid
 LEFT JOIN pokyp ON pokyp.id = orders.pokypid;
 
 // Cross Join
 
-// перекрёстное соединение, 4*4=16 строк
+// РїРµСЂРµРєСЂС‘СЃС‚РЅРѕРµ СЃРѕРµРґРёРЅРµРЅРёРµ, 4*4=16 СЃС‚СЂРѕРє
 SELECT createat, firstname FROM orders
 CROSS JOIN pokyp;
 
-// то же
+// С‚Рѕ Р¶Рµ
 SELECT createat, firstname FROM orders, pokyp
 
-// Группировка в соединениях
+// Р“СЂСѓРїРїРёСЂРѕРІРєР° РІ СЃРѕРµРґРёРЅРµРЅРёСЏС…
 
-// выведем кол-во заказов у каждого покупателя
+// РІС‹РІРµРґРµРј РєРѕР»-РІРѕ Р·Р°РєР°Р·РѕРІ Сѓ РєР°Р¶РґРѕРіРѕ РїРѕРєСѓРїР°С‚РµР»СЏ
 SELECT pokyp.firstname, COUNT(pokypid)
 FROM pokyp JOIN orders
 ON pokyp.id = orders.pokypid
 GROUP BY pokyp.firstname, pokyp.id;
 
-// + те у кого заказов нет
+// + С‚Рµ Сѓ РєРѕРіРѕ Р·Р°РєР°Р·РѕРІ РЅРµС‚
 SELECT pokyp.firstname, COUNT(pokypid)
 FROM pokyp LEFT JOIN orders
 ON pokyp.id = orders.pokypid
 GROUP BY pokyp.id, pokyp.firstname;
 
-// общая сумма заказов
+// РѕР±С‰Р°СЏ СЃСѓРјРјР° Р·Р°РєР°Р·РѕРІ
 SELECT pokyp.firstname, COUNT(pokypid), SUM(prod2.price * prod2.productcount) AS sumn
 FROM pokyp LEFT JOIN orders
 ON pokyp.id = orders.pokypid
@@ -207,9 +207,9 @@ LEFT JOIN prod2 ON prod2.id = orders.productid
 GROUP BY pokyp.id, pokyp.firstname
 ORDER BY sumn;
 
-// Объединение множеств. UNION
+// РћР±СЉРµРґРёРЅРµРЅРёРµ РјРЅРѕР¶РµСЃС‚РІ. UNION
 
-// создадим таблицы
+// СЃРѕР·РґР°РґРёРј С‚Р°Р±Р»РёС†С‹
 CREATE TABLE client
 (
   Id SERIAL PRIMARY KEY,
@@ -224,7 +224,7 @@ CREATE TABLE sotr
   LastName VARCHAR(20)
 );
 
-// заполним таблицы
+// Р·Р°РїРѕР»РЅРёРј С‚Р°Р±Р»РёС†С‹
 INSERT INTO client(FirstName, LastName, Schet)
 VALUES
 ('Tom', 'Naki', 1200),
@@ -240,51 +240,51 @@ VALUES
 ('Mark', 'Adams'),
 ('Nick', 'Svensson');
 
-// соеденим таблицы, одинаковые удалятся
+// СЃРѕРµРґРµРЅРёРј С‚Р°Р±Р»РёС†С‹, РѕРґРёРЅР°РєРѕРІС‹Рµ СѓРґР°Р»СЏС‚СЃСЏ
 SELECT firstname, lastname FROM client
 UNION SELECT firstname, lastname FROM sotr
 
 // ALL
 
-// соеденим таблицы, со всеми значениями и одинаковыми то же
+// СЃРѕРµРґРµРЅРёРј С‚Р°Р±Р»РёС†С‹, СЃРѕ РІСЃРµРјРё Р·РЅР°С‡РµРЅРёСЏРјРё Рё РѕРґРёРЅР°РєРѕРІС‹РјРё С‚Рѕ Р¶Рµ
 SELECT firstname, lastname FROM client
 UNION ALL SELECT firstname, lastname FROM sotr;
 
-// объединим 2 строки в одну
+// РѕР±СЉРµРґРёРЅРёРј 2 СЃС‚СЂРѕРєРё РІ РѕРґРЅСѓ
 SELECT firstname|| ' ' || lastname AsF
 FROM client
 UNION ALL SELECT firstname|| ' ' || lastname AS AsL
 FROM sotr
 ORDER BY AsF;
 
-// объединение с сортировкой по нескольким условиям
+// РѕР±СЉРµРґРёРЅРµРЅРёРµ СЃ СЃРѕСЂС‚РёСЂРѕРІРєРѕР№ РїРѕ РЅРµСЃРєРѕР»СЊРєРёРј СѓСЃР»РѕРІРёСЏРј
 SELECT firstname, lastname, schet + schet * 0.1 Asv
 FROM client WHERE schet < 2000
 UNION ALL SELECT firstname, lastname, schet + schet * 0.1 Asv 
 FROM client WHERE schet >= 2000;
 
-// Разность множеств. EXCEPT
+// Р Р°Р·РЅРѕСЃС‚СЊ РјРЅРѕР¶РµСЃС‚РІ. EXCEPT
 
 // EXCEPT
 
-// вычтем значения из таблицы,
-которые повторяются в другой таблице
+// РІС‹С‡С‚РµРј Р·РЅР°С‡РµРЅРёСЏ РёР· С‚Р°Р±Р»РёС†С‹,
+РєРѕС‚РѕСЂС‹Рµ РїРѕРІС‚РѕСЂСЏСЋС‚СЃСЏ РІ РґСЂСѓРіРѕР№ С‚Р°Р±Р»РёС†Рµ
 SELECT firstname, lastname
 FROM client
 EXCEPT SELECT firstname, lastname
 FROM sotr;
 
-// то же
+// С‚Рѕ Р¶Рµ
 SELECT firstname, lastname
 FROM sotr
 EXCEPT SELECT firstname, lastname
 FROM client;
 
-// Пересечение множеств. INTERSECT
+// РџРµСЂРµСЃРµС‡РµРЅРёРµ РјРЅРѕР¶РµСЃС‚РІ. INTERSECT
 
 // INTERSECT
 
-// найдём повторяющиеся значения в двух таблицах
+// РЅР°Р№РґС‘Рј РїРѕРІС‚РѕСЂСЏСЋС‰РёРµСЃСЏ Р·РЅР°С‡РµРЅРёСЏ РІ РґРІСѓС… С‚Р°Р±Р»РёС†Р°С…
 SELECT firstname, lastname
 FROM sotr
 INTERSECT SELECT firstname, lastname

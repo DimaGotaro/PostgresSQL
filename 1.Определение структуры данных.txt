@@ -1,23 +1,23 @@
-// создание таблицы
+п»ї// СЃРѕР·РґР°РЅРёРµ С‚Р°Р±Р»РёС†С‹
 CREATE TABLE users
 (
-// PRIMARY KEY - установка первичного ключа
-Id SERIAL PRIMARY KEY, // порядковый номер 1,2,3
-Name CHARACTER VARYING(30), // строка
-Age INTEGER // число
-// PRIMARY KEY(Id) // можно так установить
+// PRIMARY KEY - СѓСЃС‚Р°РЅРѕРІРєР° РїРµСЂРІРёС‡РЅРѕРіРѕ РєР»СЋС‡Р°
+Id SERIAL PRIMARY KEY, // РїРѕСЂСЏРґРєРѕРІС‹Р№ РЅРѕРјРµСЂ 1,2,3
+Name CHARACTER VARYING(30), // СЃС‚СЂРѕРєР°
+Age INTEGER // С‡РёСЃР»Рѕ
+// PRIMARY KEY(Id) // РјРѕР¶РЅРѕ С‚Р°Рє СѓСЃС‚Р°РЅРѕРІРёС‚СЊ
 );
 
-// добавление в таблицу строки
+// РґРѕР±Р°РІР»РµРЅРёРµ РІ С‚Р°Р±Р»РёС†Сѓ СЃС‚СЂРѕРєРё
 INSERT INTO users (Name, Age) VALUES('Tom', 33);
 
-// получаем данные из таблицы
+// РїРѕР»СѓС‡Р°РµРј РґР°РЅРЅС‹Рµ РёР· С‚Р°Р±Р»РёС†С‹
 SELECT * FROM users
 
-// создание базы данных
+// СЃРѕР·РґР°РЅРёРµ Р±Р°Р·С‹ РґР°РЅРЅС‹С…
 create database test2;
 
-//  удаление базы данных usersdb:
+//  СѓРґР°Р»РµРЅРёРµ Р±Р°Р·С‹ РґР°РЅРЅС‹С… usersdb:
 DROP DATABASE usersdb;
 
 // PRIMARY KEY - 
@@ -27,21 +27,21 @@ Id SERIAL,
 FirstName CHARACTER VARYING(30),
 Super Real,
 Age INTEGER,
-PRIMARY KEY(Id, Super) // у этих двух полей не может быть 
-одинаковых значений
+PRIMARY KEY(Id, Super) // Сѓ СЌС‚РёС… РґРІСѓС… РїРѕР»РµР№ РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ 
+РѕРґРёРЅР°РєРѕРІС‹С… Р·РЅР°С‡РµРЅРёР№
 );
 
 // UNIQUE 
-- в столбце только уникальные значения
+- РІ СЃС‚РѕР»Р±С†Рµ С‚РѕР»СЊРєРѕ СѓРЅРёРєР°Р»СЊРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
 CREATE TABLE customers3
 (
 Id SERIAL PRIMARY KEY,
-FirstName CHARACTER VARYING(30) UNIQUE, // если добавить
-два одинаковых значения - ошибка
+FirstName CHARACTER VARYING(30) UNIQUE, // РµСЃР»Рё РґРѕР±Р°РІРёС‚СЊ
+РґРІР° РѕРґРёРЅР°РєРѕРІС‹С… Р·РЅР°С‡РµРЅРёСЏ - РѕС€РёР±РєР°
 Super Real,
 Age INTEGER
 );
-// можно так, на уровне таблицы
+// РјРѕР¶РЅРѕ С‚Р°Рє, РЅР° СѓСЂРѕРІРЅРµ С‚Р°Р±Р»РёС†С‹
 CREATE TABLE customers3
 (
 Id SERIAL PRIMARY KEY,
@@ -52,8 +52,8 @@ UNIQUE(Age, Super)
 );
 
 // NULL 
-- столбец может принимать значение NULL, либо 
-NOT NULL наоборот
+- СЃС‚РѕР»Р±РµС† РјРѕР¶РµС‚ РїСЂРёРЅРёРјР°С‚СЊ Р·РЅР°С‡РµРЅРёРµ NULL, Р»РёР±Рѕ 
+NOT NULL РЅР°РѕР±РѕСЂРѕС‚
 CREATE TABLE customers3
 (
 Id SERIAL PRIMARY KEY,
@@ -63,7 +63,7 @@ Age INTEGER
 );
 
 // DEFAULT 
-- значение по умолчанию, если другое не задано
+- Р·РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ, РµСЃР»Рё РґСЂСѓРіРѕРµ РЅРµ Р·Р°РґР°РЅРѕ
 CREATE TABLE customers4
 (
 Id SERIAL PRIMARY KEY,
@@ -73,7 +73,7 @@ Age INTEGER DEFAULT 18
 );
 
 // CHECK 
-- условие для значения
+- СѓСЃР»РѕРІРёРµ РґР»СЏ Р·РЅР°С‡РµРЅРёСЏ
 CREATE TABLE customers5
 (
 Id SERIAL PRIMARY KEY,
@@ -81,7 +81,7 @@ FirstName CHARACTER VARYING(30) CHECK(FirstName !=''),
 Super Real,
 Age INTEGER DEFAULT 18 CHECK(Age > 0 AND Age < 100)
 );
-// для всей таблицы
+// РґР»СЏ РІСЃРµР№ С‚Р°Р±Р»РёС†С‹
 CREATE TABLE customers6
 (
 
@@ -98,7 +98,7 @@ CHECK((Age > 0 AND Age < 100) AND (FirstName !=''))
 );
 
 // CONSTRAINT 
-- имя ограничения, задаётся само
+- РёРјСЏ РѕРіСЂР°РЅРёС‡РµРЅРёСЏ, Р·Р°РґР°С‘С‚СЃСЏ СЃР°РјРѕ
 CREATE TABLE customers7
 (
 Id SERIAL PRIMARY KEY,
@@ -109,10 +109,10 @@ CONSTRAINT chek_age CHECK(Age > 0 AND Age < 100),
 CONSTRAINT check_FN CHECK (FirstName !='')
 );
 
-// Внешние ключи
-// создали две таблицы
+// Р’РЅРµС€РЅРёРµ РєР»СЋС‡Рё
+// СЃРѕР·РґР°Р»Рё РґРІРµ С‚Р°Р±Р»РёС†С‹
 
-CREATE TABLE customers7 // главная таблица
+CREATE TABLE customers7 // РіР»Р°РІРЅР°СЏ С‚Р°Р±Р»РёС†Р°
 (
 Id SERIAL PRIMARY KEY,
 FirstName CHARACTER VARYING(30),
@@ -121,30 +121,30 @@ Age INTEGER DEFAULT 18,
 CONSTRAINT chek_age CHECK(Age > 0 AND Age < 100),
 CONSTRAINT check_FN CHECK (FirstName !='')
 );
-CREATE TABLE customers8 // зависимая таблица
+CREATE TABLE customers8 // Р·Р°РІРёСЃРёРјР°СЏ С‚Р°Р±Р»РёС†Р°
 (
 Id SERIAL PRIMARY KEY,
-CustomId INTEGER REFERENCES customers7 (Id), // связана с 
-таблицей customers7 через Id
+CustomId INTEGER REFERENCES customers7 (Id), // СЃРІСЏР·Р°РЅР° СЃ 
+С‚Р°Р±Р»РёС†РµР№ customers7 С‡РµСЂРµР· Id
 Quanti INTEGER
 );
 
-// на уровне таблицы
+// РЅР° СѓСЂРѕРІРЅРµ С‚Р°Р±Р»РёС†С‹
 CREATE TABLE customers8
 (
 Id SERIAL PRIMARY KEY,
-CustomId INTEGER, // связана с 
-таблицей customers7 через Id
+CustomId INTEGER, // СЃРІСЏР·Р°РЅР° СЃ 
+С‚Р°Р±Р»РёС†РµР№ customers7 С‡РµСЂРµР· Id
 Quanti INTEGER,
 FOREIGN KEY (CustomId) REFERENCES customers7 (Id)
 );
-// строку из главной таблицы нельзя удалить пока к ней привязаны
-строки из зависимой таблицы
+// СЃС‚СЂРѕРєСѓ РёР· РіР»Р°РІРЅРѕР№ С‚Р°Р±Р»РёС†С‹ РЅРµР»СЊР·СЏ СѓРґР°Р»РёС‚СЊ РїРѕРєР° Рє РЅРµР№ РїСЂРёРІСЏР·Р°РЅС‹
+СЃС‚СЂРѕРєРё РёР· Р·Р°РІРёСЃРёРјРѕР№ С‚Р°Р±Р»РёС†С‹
 
 // CASCADE 
-- при удалении строки из главной таблицы, удалятся
-и строки из зависимой таблицы
-CREATE TABLE customers7 // главная таблица
+- РїСЂРё СѓРґР°Р»РµРЅРёРё СЃС‚СЂРѕРєРё РёР· РіР»Р°РІРЅРѕР№ С‚Р°Р±Р»РёС†С‹, СѓРґР°Р»СЏС‚СЃСЏ
+Рё СЃС‚СЂРѕРєРё РёР· Р·Р°РІРёСЃРёРјРѕР№ С‚Р°Р±Р»РёС†С‹
+CREATE TABLE customers7 // РіР»Р°РІРЅР°СЏ С‚Р°Р±Р»РёС†Р°
 (
 Id SERIAL PRIMARY KEY,
 FirstName CHARACTER VARYING(30),
@@ -153,7 +153,7 @@ Age INTEGER DEFAULT 18,
 CONSTRAINT chek_age CHECK(Age > 0 AND Age < 100),
 CONSTRAINT check_FN CHECK (FirstName !='')
 );
-CREATE TABLE customers9 // зависимая таблица
+CREATE TABLE customers9 // Р·Р°РІРёСЃРёРјР°СЏ С‚Р°Р±Р»РёС†Р°
 (
 Id SERIAL PRIMARY KEY,
 CustomId INTEGER REFERENCES customers7 (Id) ON DELETE CASCADE,
@@ -161,9 +161,9 @@ Quanti INTEGER
 );
 
 // SET NULL 
-- при удалении строки из главной таблицы значение внешнего ключа
-станет NULL
-CREATE TABLE customers10 // зависимая таблица
+- РїСЂРё СѓРґР°Р»РµРЅРёРё СЃС‚СЂРѕРєРё РёР· РіР»Р°РІРЅРѕР№ С‚Р°Р±Р»РёС†С‹ Р·РЅР°С‡РµРЅРёРµ РІРЅРµС€РЅРµРіРѕ РєР»СЋС‡Р°
+СЃС‚Р°РЅРµС‚ NULL
+CREATE TABLE customers10 // Р·Р°РІРёСЃРёРјР°СЏ С‚Р°Р±Р»РёС†Р°
 (
 Id SERIAL PRIMARY KEY,
 CustomId INTEGER REFERENCES customers7 (Id) ON DELETE SET NULL,
@@ -171,64 +171,64 @@ Quanti INTEGER
 ); 
 
 // 
-- при удалении строки из главной таблицы значение внешнего ключа
-станет значение по умолчанию, если не установлено - NULL
-CREATE TABLE customers1 // зависимая таблица
+- РїСЂРё СѓРґР°Р»РµРЅРёРё СЃС‚СЂРѕРєРё РёР· РіР»Р°РІРЅРѕР№ С‚Р°Р±Р»РёС†С‹ Р·РЅР°С‡РµРЅРёРµ РІРЅРµС€РЅРµРіРѕ РєР»СЋС‡Р°
+СЃС‚Р°РЅРµС‚ Р·РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ, РµСЃР»Рё РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅРѕ - NULL
+CREATE TABLE customers1 // Р·Р°РІРёСЃРёРјР°СЏ С‚Р°Р±Р»РёС†Р°
 (
 Id SERIAL PRIMARY KEY,
 CustomId INTEGER REFERENCES customers7 (Id) ON DELETE SET DEFAULT,
 Quanti INTEGER
 );
 
-// Изменение таблиц
-// Добавление нового столбца в таблицу customers1
+// РР·РјРµРЅРµРЅРёРµ С‚Р°Р±Р»РёС†
+// Р”РѕР±Р°РІР»РµРЅРёРµ РЅРѕРІРѕРіРѕ СЃС‚РѕР»Р±С†Р° РІ С‚Р°Р±Р»РёС†Сѓ customers1
 ALTER TABLE customers1
 ADD Phone CHARACTER VARYING(20) NULL; 
-// если в таблице есть данные, то у добавленного столбца 
-будет значение NULL
+// РµСЃР»Рё РІ С‚Р°Р±Р»РёС†Рµ РµСЃС‚СЊ РґР°РЅРЅС‹Рµ, С‚Рѕ Сѓ РґРѕР±Р°РІР»РµРЅРЅРѕРіРѕ СЃС‚РѕР»Р±С†Р° 
+Р±СѓРґРµС‚ Р·РЅР°С‡РµРЅРёРµ NULL
 
-// но если пустого значения не должно быть, то можно задать 
-значение по умолчанию
+// РЅРѕ РµСЃР»Рё РїСѓСЃС‚РѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ РЅРµ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ, С‚Рѕ РјРѕР¶РЅРѕ Р·Р°РґР°С‚СЊ 
+Р·РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 ALTER TABLE customers1
-ADD Adress CHARACTER VARYING(20) NOT NULL DEFAULT 'Неизвестно';
+ADD Adress CHARACTER VARYING(20) NOT NULL DEFAULT 'РќРµРёР·РІРµСЃС‚РЅРѕ';
 
-// Удаление столбца
+// РЈРґР°Р»РµРЅРёРµ СЃС‚РѕР»Р±С†Р°
 ALTER TABLE customers1
 DROP COLUMN Phone
 
-// Изменение типа столбца
+// РР·РјРµРЅРµРЅРёРµ С‚РёРїР° СЃС‚РѕР»Р±С†Р°
 ALTER TABLE customers1
 ALTER COLUMN Adress TYPE VARCHAR(50); 
 
-//VARCHAR(50) (он же VARYING CHARACTER(50))
+//VARCHAR(50) (РѕРЅ Р¶Рµ VARYING CHARACTER(50))
 
-// Изменение ограничений столбца
+// РР·РјРµРЅРµРЅРёРµ РѕРіСЂР°РЅРёС‡РµРЅРёР№ СЃС‚РѕР»Р±С†Р°
 ALTER TABLE Customers1
 ALTER COLUMN quanti
-SET NOT NULL; // не должен быть NULL
+SET NOT NULL; // РЅРµ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ NULL
 
-// удаление ограничения
+// СѓРґР°Р»РµРЅРёРµ РѕРіСЂР°РЅРёС‡РµРЅРёСЏ
 ALTER TABLE Customers1
 ALTER COLUMN quanti
 DROP NOT NULL;
 
-// Изменение ограничений таблицы
+// РР·РјРµРЅРµРЅРёРµ РѕРіСЂР°РЅРёС‡РµРЅРёР№ С‚Р°Р±Р»РёС†С‹
 ALTER TABLE customers1
 ADD CHECK (quanti > 0);
 
-// добавили ограничение с именем
+// РґРѕР±Р°РІРёР»Рё РѕРіСЂР°РЅРёС‡РµРЅРёРµ СЃ РёРјРµРЅРµРј
 ALTER TABLE customers1
 ADD CONSTRAINT quanti_unique UNIQUE (quanti);
 
-// удаление ограничения
+// СѓРґР°Р»РµРЅРёРµ РѕРіСЂР°РЅРёС‡РµРЅРёСЏ
 ALTER TABLE customers1
 DROP CONSTRAINT quanti_unique;
-// имя ограничения задаётся само
+// РёРјСЏ РѕРіСЂР°РЅРёС‡РµРЅРёСЏ Р·Р°РґР°С‘С‚СЃСЏ СЃР°РјРѕ
 
-// переименование столбца
+// РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёРµ СЃС‚РѕР»Р±С†Р°
 ALTER TABLE customers1
 RENAME COLUMN adress TO City;
 
-// переименование таблицы
+// РїРµСЂРµРёРјРµРЅРѕРІР°РЅРёРµ С‚Р°Р±Р»РёС†С‹
 ALTER TABLE customers1
 RENAME TO customers11;
