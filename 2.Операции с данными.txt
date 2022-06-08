@@ -1,0 +1,105 @@
+// Операции с данными
+// Добавление данных. Команда Insert
+
+// создали таблицу
+CREATE TABLE Prod
+(
+Id SERIAL PRIMARY KEY,
+ProductName VARCHAR(30) NOT NULL,
+Manufacturer VARCHAR(20) NOT NULL,
+ProductCount INTEGER DEFAULT 0,
+Price NUMERIC
+);
+
+// добавление строки
+INSERT INTO prod VALUES(1, 'POCOX3', 'XIAOMI', 5, 300)
+
+// добавление по столбцам
+INSERT INTO prod (Manufacturer, Price, ProductName)
+VALUES('Samsung', 500, 'Gelaxi 5');
+
+// добавление нескольких строк
+INSERT INTO prod (Manufacturer, Price, ProductName, ProductCount)
+VALUES('Samsung', 650, 'Gelaxi 6', 6)
+VALUES('Samsung', 250, 'Gelaxi 4s', 10);
+
+// Возвращение значений
+INSERT INTO prod (Manufacturer, Price, ProductName, ProductCount)
+VALUES ('Apple', 1000, 'iPhone12', 8) RETURNING id;
+// вернули Id
+
+// Получение данных. Команда Select
+SELECT * FROM prod // * - все столбцы
+
+// получение отдельных столбцов
+SELECT productname, price FROM prod
+
+// получение значений с условием
+SELECT productname, price * productcount
+FROM prod
+
+// AS 
+- изменяет название выходного столбца
+SELECT productname, price * productcount AS TitSum
+FROM prod
+
+// Фильтрация. WHERE
+// поиск по значению в столбце
+SELECT * FROM Prod
+WHERE Manufacturer = 'Samsung';
+
+SELECT * FROM Prod
+WHERE price < 600;
+
+SELECT * FROM Prod
+WHERE ProductCount * price > 3000;
+
+// Логические операторы
+// AND 
+- все условия верны
+SELECT * FROM Prod
+WHERE Manufacturer = 'Samsung' AND price > 499;
+
+// OR
+- одно условие верно
+SELECT * FROM Prod
+WHERE Manufacturer = 'Samsung' OR price > 499;
+
+SELECT * FROM Prod
+WHERE Manufacturer <> 'Samsung'; // не Samsung
+
+SELECT * FROM Prod
+WHERE NOT Manufacturer = 'Samsung'; // то же
+
+// составной
+SELECT * FROM Prod
+WHERE Manufacturer = 'Samsung' OR (ProductCount > 7 AND price > 500);
+
+// IS NULL 
+- поиск с значением NULL
+SELECT * FROM Prod
+WHERE ProductCount IS NULL;
+
+// наоборот
+SELECT * FROM Prod
+WHERE ProductCount IS NOT NULL;
+
+// Обновление данных. Команда UPDATE
+// +100 к цене
+UPDATE prod
+SET price = price + 100;
+
+// изменение с условием
+UPDATE prod
+SET Manufacturer = 'Samsung Inc.'
+WHERE manufacturer = 'Samsung';
+
+// изменение нескольких
+UPDATE prod
+SET Manufacturer = 'Samsung Inc.',
+productcount = productcount + 1
+WHERE manufacturer = 'Samsung';
+
+// удаление из таблицы с условием
+DELETE FROM prod
+WHERE price < 500 AND manufacturer = 'Samsung Inc.';

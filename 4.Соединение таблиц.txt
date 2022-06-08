@@ -1,0 +1,291 @@
+// Ќе€вное соединение таблиц
+
+// создадим таблицы, св€занные по столбцам
+CREATE TABLE Prod2
+(
+Id SERIAL PRIMARY KEY,
+Company VARCHAR(30) NOT NULL,
+ProductName VARCHAR(30) NOT NULL,
+ProductCount INTEGER DEFAULT 0,
+Price NUMERIC DEFAULT 0,
+IsDisc BOOLEAN
+);
+CREATE TABLE pokyp (
+Id SERIAL PRIMARY KEY,
+FirstName VARCHAR(20) NOT NULL
+);
+CREATE TABLE orders (
+Id SERIAL PRIMARY KEY,
+ProductId INTEGER NOT NULL REFERENCES prod2(id) ON DELETE CASCADE,
+PokypId INTEGER NOT NULL REFERENCES pokyp(id) ON DELETE CASCADE,
+CreateAt DATE NOT NULL,
+ProdyctCount INTEGER DEFAULT 1,
+Price NUMERIC NOT NULL
+);
+
+// добавим данные
+INSERT INTO prod2 (Company, ProductName, ProductCount, Price, IsDisc)
+VALUES 
+('XIAOMI', 'Redmi 3', 5, 250, true),
+('XIAOMI', 'POCO X3', 7, 320, false),
+('Samsung', 'Galaxu 5', 3, 670, false),
+('Samsung', 'Galaxu 4si', 9, 190, true),
+('APPLE', 'iPhone 12', 8, 500, true),
+('LENOVO', 'Asus 2r', 6, 800, false);
+INSERT INTO pokyp(FirstName)
+VALUES 
+('Tom'),
+('Bob'),
+('Jons');
+INSERT INTO orders(productid, pokypid, createat, prodyctcount, price)
+VALUES 
+(
+  (SELECT Id FROM prod2 WHERE productname = 'Redmi 3'),
+  (SELECT Id FROM pokyp WHERE FirstName = 'Tom'),
+  '2022-02-01',
+  2,
+  (SELECT price FROM prod2 WHERE productname = 'Redmi 3')
+),
+(
+  (SELECT Id FROM prod2 WHERE productname = 'Galaxu 5'),
+  (SELECT Id FROM pokyp WHERE FirstName = 'Bob'),
+  '2022-02-03',
+  3,
+  (SELECT price FROM prod2 WHERE productname = 'Galaxu 5')
+),
+(
+  (SELECT Id FROM prod2 WHERE productname = 'iPhone 12'),
+  (SELECT Id FROM pokyp WHERE FirstName = 'Jons'),
+  '2022-02-05',
+  4,
+  (SELECT price FROM prod2 WHERE productname = 'iPhone 12')
+);
+
+// объеденм две таблицы
+SELECT * FROM orders, pokyp
+
+// объеденим таблицы по внешнему ключу
+SELECT * FROM orders, pokyp
+WHERE orders.pokypid = pokyp.id;
+
+// выведем данные по соответствию внешнему ключу
+SELECT pokyp.firstname, prod2.productname, orders.createat
+FROM pokyp, prod2, orders
+WHERE orders.pokypid = pokyp.id AND orders.productid = prod2.id;
+
+// можно сократить 
+SELECT P.firstname, D.productname, O.createat
+FROM pokyp AS P, prod2 AS D, orders AS O
+WHERE O.pokypid = P.id AND O.productid = D.id;
+
+// выведем в совместный результат все столбцы из таблицы
+SELECT P.firstname, D.productname, O.*
+FROM pokyp AS P, prod2 AS D, orders AS O
+WHERE O.pokypid = P.id AND O.productid = D.id;
+
+// INNER JOIN
+
+// соеденили две таблицы с условием
+SELECT orders.createat, orders.prodyctcount, prod2.productname
+FROM orders
+JOIN prod2 ON prod2.id = orders.productid
+
+// сократим код
+SELECT G.createat, G.prodyctcount, F.productname
+FROM orders AS G
+JOIN prod2 AS F ON F.id = G.productid
+
+// соеденим 3 таблицы с условием соединени€, и условием
+вывода, и сортировки
+SELECT orders.createat, prod2.productname, pokyp.firstname
+FROM orders
+JOIN prod2 ON prod2.id = orders.productid
+JOIN pokyp ON pokyp.id = orders.pokypid
+WHERE prod2.price > 450
+ORDER BY pokyp.firstname;
+
+// то же с доп условием
+SELECT orders.createat, prod2.productname, pokyp.firstname
+FROM orders
+JOIN prod2 ON prod2.id = orders.productid AND prod2.company = 'XIAOMI'
+JOIN pokyp ON pokyp.id = orders.pokypid
+ORDER BY pokyp.firstname;
+
+// OUTER JOIN и CROSS JOIN
+
+// добавим строку в таблицу
+INSERT INTO orders(productid, pokypid, createat, prodyctcount, price)
+VALUES
+(
+  (SELECT Id FROM prod2 WHERE productname = 'Galaxu 5'),
+  (SELECT Id FROM pokyp WHERE FirstName = 'Tom'),
+  '2022-02-07',
+  1,
+  (SELECT price FROM prod2 WHERE productname = 'Galaxu 5')
+);
+
+// вывод сначала строк из первой(левой) таблицы
+SELECT createat, price, firstname
+FROM orders // лева€
+LEFT JOIN pokyp ON pokyp.id = orders.pokypid;
+
+// добавим покупател€
+INSERT INTO pokyp(firstname) VALUES('Biba');
+
+// LEFT JOIN - таблицы соеден€ютс€ не строго(строки из побочной
+таблицы не прошедшие условие добав€тс€ к основной(левой при LEFT))
+
+// выведем таблицы,выбираем основную таблицу левую(первую, pokyp),
+а к ней добавл€ютс€ строки из других таблиц(orders), которые
+не соответствуют условию
+SELECT createat, price, firstname
+FROM pokyp LEFT JOIN orders
+ON pokyp.id = orders.pokypid;
+
+// сделаем основной правую(вторую) таблицу
+SELECT createat, price, firstname
+FROM orders RIGHT JOIN pokyp
+ON pokyp.id = orders.pokypid;
+
+// объеденим все таблицы без основной
+SELECT createat, price, firstname
+FROM pokyp FULL JOIN orders
+ON pokyp.id = orders.pokypid;
+
+// соеденим три таблицы
+SELECT createat, firstname, company
+FROM pokyp
+LEFT JOIN orders ON pokyp.id = orders.pokypid
+LEFT JOIN prod2 ON prod2.id = orders.productid;
+
+// с условием вывода и сортировкой
+SELECT createat, firstname, company
+FROM pokyp
+LEFT JOIN orders ON pokyp.id = orders.pokypid
+LEFT JOIN prod2 ON prod2.id = orders.productid
+WHERE prod2.price > 500
+ORDER BY orders.createat;
+
+// выведем покупател€ у которого значение orders.pokypid = NULL
+SELECT firstname FROM pokyp
+LEFT JOIN orders ON pokyp.id = orders.pokypid
+WHERE orders.pokypid IS NULL;
+
+// совместно
+SELECT firstname, createat, productname FROM orders
+JOIN prod2 ON prod2.id = orders.productid
+LEFT JOIN pokyp ON pokyp.id = orders.pokypid;
+
+// Cross Join
+
+// перекрЄстное соединение, 4*4=16 строк
+SELECT createat, firstname FROM orders
+CROSS JOIN pokyp;
+
+// то же
+SELECT createat, firstname FROM orders, pokyp
+
+// √руппировка в соединени€х
+
+// выведем кол-во заказов у каждого покупател€
+SELECT pokyp.firstname, COUNT(pokypid)
+FROM pokyp JOIN orders
+ON pokyp.id = orders.pokypid
+GROUP BY pokyp.firstname, pokyp.id;
+
+// + те у кого заказов нет
+SELECT pokyp.firstname, COUNT(pokypid)
+FROM pokyp LEFT JOIN orders
+ON pokyp.id = orders.pokypid
+GROUP BY pokyp.id, pokyp.firstname;
+
+// обща€ сумма заказов
+SELECT pokyp.firstname, COUNT(pokypid), SUM(prod2.price * prod2.productcount) AS sumn
+FROM pokyp LEFT JOIN orders
+ON pokyp.id = orders.pokypid
+LEFT JOIN prod2 ON prod2.id = orders.productid
+GROUP BY pokyp.id, pokyp.firstname
+ORDER BY sumn;
+
+// ќбъединение множеств. UNION
+
+// создадим таблицы
+CREATE TABLE client
+(
+  Id SERIAL PRIMARY KEY,
+  FirstName VARCHAR(20),
+  LastName VARCHAR(20),
+  Schet NUMERIC DEFAULT 0
+);
+CREATE TABLE sotr
+(
+  Id SERIAL PRIMARY KEY,
+  FirstName VARCHAR(20),
+  LastName VARCHAR(20)
+);
+
+// заполним таблицы
+INSERT INTO client(FirstName, LastName, Schet)
+VALUES
+('Tom', 'Naki', 1200),
+('Bob', 'Maki', 1800),
+('Jon', 'Milkovich', 2000),
+('Victor', 'Baya', 2800),
+('Mark', 'Adams', 2500),
+('Tim', 'Cook', 2800);
+INSERT INTO sotr(FirstName, LastName)
+VALUES
+('Homer', 'Simpson'),
+('Tom', 'Naki'),
+('Mark', 'Adams'),
+('Nick', 'Svensson');
+
+// соеденим таблицы, одинаковые удал€тс€
+SELECT firstname, lastname FROM client
+UNION SELECT firstname, lastname FROM sotr
+
+// ALL
+
+// соеденим таблицы, со всеми значени€ми и одинаковыми то же
+SELECT firstname, lastname FROM client
+UNION ALL SELECT firstname, lastname FROM sotr;
+
+// объединим 2 строки в одну
+SELECT firstname|| ' ' || lastname AsF
+FROM client
+UNION ALL SELECT firstname|| ' ' || lastname AS AsL
+FROM sotr
+ORDER BY AsF;
+
+// объединение с сортировкой по нескольким услови€м
+SELECT firstname, lastname, schet + schet * 0.1 Asv
+FROM client WHERE schet < 2000
+UNION ALL SELECT firstname, lastname, schet + schet * 0.1 Asv 
+FROM client WHERE schet >= 2000;
+
+// –азность множеств. EXCEPT
+
+// EXCEPT
+
+// вычтем значени€ из таблицы,
+которые повтор€ютс€ в другой таблице
+SELECT firstname, lastname
+FROM client
+EXCEPT SELECT firstname, lastname
+FROM sotr;
+
+// то же
+SELECT firstname, lastname
+FROM sotr
+EXCEPT SELECT firstname, lastname
+FROM client;
+
+// ѕересечение множеств. INTERSECT
+
+// INTERSECT
+
+// найдЄм повтор€ющиес€ значени€ в двух таблицах
+SELECT firstname, lastname
+FROM sotr
+INTERSECT SELECT firstname, lastname
+FROM client;

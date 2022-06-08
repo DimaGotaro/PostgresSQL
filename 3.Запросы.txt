@@ -1,0 +1,419 @@
+// Запросы
+// DICTINCT. Выборка уникальных значений
+
+// все уникальные значения столбца
+SELECT DISTINCT manufacturer FROM prod 
+
+// все значения столбца
+SELECT manufacturer FROM prod
+
+// ORDER BY. Сортировка. По возрастанию
+
+// сортировка по значениям столбца
+SELECT * FROM prod
+ORDER BY price
+
+// сортировка условия при вызове столбца
+SELECT productname, productcount * price AS titsum
+FROM prod
+ORDER BY titsum
+
+// сортировка по условию
+SELECT productname, productcount, price
+FROM prod
+ORDER BY productcount * price
+
+// сортировка по убыванию
+SELECT productname, productcount, price
+FROM prod
+ORDER BY productcount * price DESC
+
+// сортировка по возрастанию
+SELECT productname, productcount, price
+FROM prod
+ORDER BY productcount * price ASC
+
+// сортировка по нескольким столбцам
+SELECT productname, productcount, price
+FROM prod
+ORDER BY productcount, price
+
+// Получение диапазона строк. LIMIT и OFFSET
+
+// LIMIT
+// вывести 2 строки во всех столбцах
+SELECT *
+FROM prod
+LIMIT 2
+
+// OFFSET 
+- начальное значение строки
+// c 2 строки вывести 2 строки
+SELECT *
+FROM prod
+OFFSET 2
+LIMIT 2
+
+// вывести все ничиная со второй
+SELECT *
+FROM prod
+OFFSET 2
+
+// Операторы фильтрации
+
+// Оператор IN
+// вывести с разными значениями в столбце
+SELECT * FROM prod
+WHERE manufacturer IN('Samsung Inc.', 'XIAOMI')
+
+// не соответствует значениям в столбце
+SELECT * FROM prod
+WHERE manufacturer NOT IN('Samsung Inc.', 'XIAOMI')
+
+// Оператор BETWEEN
+// вывести 400 до 800 в столбце 
+SELECT * FROM prod
+WHERE price BETWEEN 400 AND 800
+
+// вывести с условием
+SELECT * FROM prod
+WHERE price * productcount BETWEEN 3000 AND 10000
+
+// Оператор LIKE
+// вывести совпадения по шаблону строки, 'Gel%' и символы
+SELECT * FROM prod
+WHERE productname LIKE 'Gel%'
+
+// вывести совпадения по шаблону строки, 'Gelaxi _' и один символ
+SELECT * FROM prod
+WHERE productname LIKE 'Gelaxi _'
+
+// Агрегатные функции
+
+// добавим таблицу
+CREATE TABLE Prod2
+(
+Id SERIAL PRIMARY KEY,
+Company VARCHAR(30) NOT NULL,
+ProductName VARCHAR(30) NOT NULL,
+ProductCount INTEGER DEFAULT 0,
+Price NUMERIC DEFAULT 0,
+IsDisc BOOLEAN
+);
+
+// добавим строки
+INSERT INTO prod2 (Company, ProductName, ProductCount, Price, IsDisc)
+VALUES 
+('XIAOMI', 'Redmi 3', 5, 250, true),
+('XIAOMI', 'POCO X3', 7, 320, false),
+('Samsung', 'Galaxu 5', 3, 670, false),
+('Samsung', 'Galaxu 4si', 9, 190, true),
+('APPLE', 'iPhone 12', 8, 500, true),
+('LENOVO', 'Asus 2r', 6, 800, false);
+
+// выведем среднее значение всех price и назовём столбец вывода 
+SELECT AVG(price) AS sred_price FROM prod2
+
+// среднее с фильтрацией по значениям в столбце
+SELECT AVG(price) AS sred_price FROM prod2
+WHERE company = 'Samsung';
+
+// среднее с бинарной операцией
+SELECT AVG(price * productcount) AS sred_price FROM prod2
+
+// Count
+// вывести кол-во строк
+SELECT COUNT(*) FROM prod2
+
+// вывести уникальные значения из строки, игнорирует NULL
+SELECT COUNT(DISTINCT company) FROM prod2
+
+// Min и Max
+
+// вывести минимальное значение в строке
+SELECT MIN(price) FROM prod2;
+
+// вывести максимальное значение в строке
+SELECT MAX(price) FROM prod2;
+
+// Sum
+
+//сумма в столбце
+SELECT SUM(price) FROM prod2;
+
+// сумма с операцией
+SELECT SUM(price * productcount) FROM prod2;
+
+// BOOL_AND и BOOL_OR
+
+// хотя бы одно значение в столбце = true
+SELECT BOOL_OR(isdisc) FROM prod2;
+
+// true - если все значения true
+SELECT BOOL_AND(isdisc) FROM prod2;
+
+// STRING_AGG
+
+// вывод всех строковых значений
+SELECT STRING_AGG(productname, ', ') FROM prod2;
+
+// вывод всех уникальных строковых значений
+SELECT STRING_AGG(DISTINCT company, ', ') FROM prod2;
+
+// несколько
+SELECT
+COUNT(*),
+MIN(price) AS MinPrice,
+SUM(productcount) AS SumPR
+FROM prod2;
+
+// Группировка
+
+// GROUP BY
+
+// группировка по одинаковым значениям столбца, и вывод кол-ва
+сгрупированных элементов у каждой группировки
+SELECT company, COUNT(*) AS ModL
+FROM prod2
+GROUP BY company;
+
+// группировка по нескольким столбцам
+SELECT company, productcount, COUNT(*) AS ModL
+FROM prod2
+GROUP BY company, productcount;
+
+// группировка после условия и сортировка по ModL
+SELECT company, COUNT(*) AS ModL
+FROM prod2
+WHERE price > 100
+GROUP BY company
+ORDER BY ModL DESC;
+
+// Фильтрация групп. HAVING
+
+// условия для сгрупперованных данных
+SELECT company, COUNT(*) AS ModL
+FROM prod2
+GROUP BY company
+HAVING COUNT(*) > 1;
+
+// условие до группировки и для сгруппированных данных
+SELECT company, COUNT(*) AS ModL
+FROM prod2
+WHERE price > 200
+GROUP BY company
+HAVING COUNT(*) > 1;
+
+// условие до группировки, после, и сортировка результата
+SELECT company, COUNT(*) AS ModL
+FROM prod2
+WHERE price > 200
+GROUP BY company
+HAVING COUNT(*) > 1
+ORDER BY ModL DESC;
+
+// то же + вывести сумму столбца сгрупперованных данных
+SELECT company, COUNT(*) AS ModL, SUM(productcount) AS Uni
+FROM prod2
+WHERE price > 200
+GROUP BY company
+HAVING COUNT(*) > 1
+ORDER BY ModL DESC;
+
+// GROUPING SETS, CUBE и ROLLUP
+
+// GROUPING SETS
+
+// группировка по нескольким столбцам отдельно от каждого
+SELECT company, COUNT(*) AS ModL, productcount
+FROM prod2
+GROUP BY GROUPING SETS(company, productcount);
+
+// ROLLUP
+
+// добавляет суммирующую строку ко всей таблице
+SELECT company, COUNT(*) AS ModL, SUM(price)
+FROM prod2
+GROUP BY ROLLUP(company);
+
+// при сортировке в конце каждой группы сумма значений группы
+SELECT company, COUNT(*) AS ModL, SUM(productcount)
+FROM prod2
+GROUP BY ROLLUP(company, productcount)
+ORDER BY company;
+
+// CUBE
+
+// сумма для каждой комбинации групп
+SELECT company, COUNT(*) AS ModL, SUM(productcount)
+FROM prod2
+GROUP BY CUBE(company, productcount);
+
+// Подзапросы
+
+// создадим таблицы, связанные по столбцам
+CREATE TABLE Prod2
+(
+Id SERIAL PRIMARY KEY,
+Company VARCHAR(30) NOT NULL,
+ProductName VARCHAR(30) NOT NULL,
+ProductCount INTEGER DEFAULT 0,
+Price NUMERIC DEFAULT 0,
+IsDisc BOOLEAN
+);
+CREATE TABLE pokyp (
+Id SERIAL PRIMARY KEY,
+FirstName VARCHAR(20) NOT NULL
+);
+CREATE TABLE orders (
+Id SERIAL PRIMARY KEY,
+ProductId INTEGER NOT NULL REFERENCES prod2(id) ON DELETE CASCADE,
+PokypId INTEGER NOT NULL REFERENCES pokyp(id) ON DELETE CASCADE,
+CreateAt DATE NOT NULL,
+ProdyctCount INTEGER DEFAULT 1,
+Price NUMERIC NOT NULL
+);
+
+// добавим данные
+INSERT INTO prod2 (Company, ProductName, ProductCount, Price, IsDisc)
+VALUES 
+('XIAOMI', 'Redmi 3', 5, 250, true),
+('XIAOMI', 'POCO X3', 7, 320, false),
+('Samsung', 'Galaxu 5', 3, 670, false),
+('Samsung', 'Galaxu 4si', 9, 190, true),
+('APPLE', 'iPhone 12', 8, 500, true),
+('LENOVO', 'Asus 2r', 6, 800, false);
+INSERT INTO pokyp(FirstName)
+VALUES 
+('Tom'),
+('Bob'),
+('Jons');
+INSERT INTO orders(productid, pokypid, createat, prodyctcount, price)
+VALUES 
+(
+  (SELECT Id FROM prod2 WHERE productname = 'Redmi 3'),
+  (SELECT Id FROM pokyp WHERE FirstName = 'Tom'),
+  '2022-02-01',
+  2,
+  (SELECT price FROM prod2 WHERE productname = 'Redmi 3')
+),
+(
+  (SELECT Id FROM prod2 WHERE productname = 'Galaxu 5'),
+  (SELECT Id FROM pokyp WHERE FirstName = 'Bob'),
+  '2022-02-03',
+  3,
+  (SELECT price FROM prod2 WHERE productname = 'Galaxu 5')
+),
+(
+  (SELECT Id FROM prod2 WHERE productname = 'iPhone 12'),
+  (SELECT Id FROM pokyp WHERE FirstName = 'Jons'),
+  '2022-02-05',
+  4,
+  (SELECT price FROM prod2 WHERE productname = 'iPhone 12')
+);
+
+// вывести строку с минимальной ценой
+SELECT * FROM prod2
+WHERE price = (SELECT MIN(price) FROM prod2)
+
+// вывести строки с ценой больше чем средняя
+SELECT * FROM prod2
+WHERE price > (SELECT AVG(price) FROM prod2);
+
+// Коррелирующие подзапросы
+
+// вывести значения которые соответствуют дргим значениям
+по внешнему ключу
+SELECT createat, price,
+(SELECT productname FROM prod2
+WHERE orders.pokypid = prod2.id)
+FROM orders;
+
+// вывести товары стоимость которых выше среднего у определённого
+производителя
+SELECT productname, price, company,
+(SELECT AVG(price) FROM prod2 AS Sprod
+WHERE Sprod.company = prod2.company)
+FROM prod2
+WHERE price > 
+(SELECT AVG(price) FROM prod2 AS Sprod
+WHERE Sprod.company = prod2.company);
+
+// Составные типы данных
+// Массивы
+
+// создадим таблицу с массивом
+CREATE TABLE mass
+(
+  Id SERIAL PRIMARY KEY,
+  Title VARCHAR(30),
+  body TEXT,
+  massive VARCHAR(10)[]
+);
+
+// добавим данные
+INSERT INTO mass(title, body, massive)
+VALUES ('Paaf', 'Jpoef', '{"sql", "postgres", "course"}');
+
+// выведем массив
+SELECT massive FROM mass;
+
+// выведем элемент массива
+SELECT massive[3] FROM mass;
+
+// удалить все элементы из массива
+update mass 
+set massive='{}'
+where id=1;
+
+// установим элементы массива
+update mass
+set massive='{sql2, postgres2, frg}'
+where id=1;
+
+// установим конкретный элемент массива
+update mass
+set massive[1]='sql3'
+where id=1;
+
+// Перечисления enum
+
+// создадим перечисление(тип столбца в будущем)
+CREATE TYPE perechsl AS ENUM ('bgin', 'approwd', 'finish');
+
+// создадим таблицу с столбцом типа перечисления
+CREATE TABLE ENAM
+(
+Id SERIAL PRIMARY KEY,
+soderj VARCHAR(20),
+status perechsl
+);
+
+// добавим данные, в типе perechsl могут быть только значения
+указанные нами
+INSERT INTO enam(soderj, status)
+VALUES ('jfkdi', 'approwd'),
+('544df', 'bgin')
+
+// изменим значение перечисления в таблице
+update enam
+set status ='finish'
+where id=2;
+
+// добавим в перечисления значение
+update enam
+set status ='finish'
+where id=2;
+
+// добавим значение в перечисление
+ALTER TYPE perechsl ADD VALUE 'porebric';
+
+// создадим новое перечисление с новым значением
+CREATE TYPE newperec2 AS ENUM ('finish', 'approwd', 'done');
+
+// укажем таблице, чтобы она использовала новое перечисление
+ALTER TABLE enam ALTER COLUMN status TYPE newperec2
+USING status::TEXT::newperec2;
+
+// удалим перечисление
+DROP TYPE perechsl;

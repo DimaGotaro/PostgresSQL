@@ -1,0 +1,234 @@
+// создание таблицы
+CREATE TABLE users
+(
+// PRIMARY KEY - установка первичного ключа
+Id SERIAL PRIMARY KEY, // порядковый номер 1,2,3
+Name CHARACTER VARYING(30), // строка
+Age INTEGER // число
+// PRIMARY KEY(Id) // можно так установить
+);
+
+// добавление в таблицу строки
+INSERT INTO users (Name, Age) VALUES('Tom', 33);
+
+// получаем данные из таблицы
+SELECT * FROM users
+
+// создание базы данных
+create database test2;
+
+//  удаление базы данных usersdb:
+DROP DATABASE usersdb;
+
+// PRIMARY KEY - 
+CREATE TABLE customers2
+(
+Id SERIAL,
+FirstName CHARACTER VARYING(30),
+Super Real,
+Age INTEGER,
+PRIMARY KEY(Id, Super) // у этих двух полей не может быть 
+одинаковых значений
+);
+
+// UNIQUE 
+- в столбце только уникальные значения
+CREATE TABLE customers3
+(
+Id SERIAL PRIMARY KEY,
+FirstName CHARACTER VARYING(30) UNIQUE, // если добавить
+два одинаковых значения - ошибка
+Super Real,
+Age INTEGER
+);
+// можно так, на уровне таблицы
+CREATE TABLE customers3
+(
+Id SERIAL PRIMARY KEY,
+FirstName CHARACTER VARYING(30),
+Super Real,
+Age INTEGER,
+UNIQUE(Age, Super)
+);
+
+// NULL 
+- столбец может принимать значение NULL, либо 
+NOT NULL наоборот
+CREATE TABLE customers3
+(
+Id SERIAL PRIMARY KEY,
+FirstName CHARACTER VARYING(30) NULL,
+Super Real,
+Age INTEGER
+);
+
+// DEFAULT 
+- значение по умолчанию, если другое не задано
+CREATE TABLE customers4
+(
+Id SERIAL PRIMARY KEY,
+FirstName CHARACTER VARYING(30) NULL,
+Super Real,
+Age INTEGER DEFAULT 18
+);
+
+// CHECK 
+- условие для значения
+CREATE TABLE customers5
+(
+Id SERIAL PRIMARY KEY,
+FirstName CHARACTER VARYING(30) CHECK(FirstName !=''),
+Super Real,
+Age INTEGER DEFAULT 18 CHECK(Age > 0 AND Age < 100)
+);
+// для всей таблицы
+CREATE TABLE customers6
+(
+
+Id SERIAL PRIMARY KEY,
+
+FirstName CHARACTER VARYING(30),
+
+Super Real,
+
+Age INTEGER DEFAULT 18,
+
+CHECK((Age > 0 AND Age < 100) AND (FirstName !=''))
+
+);
+
+// CONSTRAINT 
+- имя ограничения, задаётся само
+CREATE TABLE customers7
+(
+Id SERIAL PRIMARY KEY,
+FirstName CHARACTER VARYING(30),
+Super Real,
+Age INTEGER DEFAULT 18,
+CONSTRAINT chek_age CHECK(Age > 0 AND Age < 100),
+CONSTRAINT check_FN CHECK (FirstName !='')
+);
+
+// Внешние ключи
+// создали две таблицы
+
+CREATE TABLE customers7 // главная таблица
+(
+Id SERIAL PRIMARY KEY,
+FirstName CHARACTER VARYING(30),
+Super Real,
+Age INTEGER DEFAULT 18,
+CONSTRAINT chek_age CHECK(Age > 0 AND Age < 100),
+CONSTRAINT check_FN CHECK (FirstName !='')
+);
+CREATE TABLE customers8 // зависимая таблица
+(
+Id SERIAL PRIMARY KEY,
+CustomId INTEGER REFERENCES customers7 (Id), // связана с 
+таблицей customers7 через Id
+Quanti INTEGER
+);
+
+// на уровне таблицы
+CREATE TABLE customers8
+(
+Id SERIAL PRIMARY KEY,
+CustomId INTEGER, // связана с 
+таблицей customers7 через Id
+Quanti INTEGER,
+FOREIGN KEY (CustomId) REFERENCES customers7 (Id)
+);
+// строку из главной таблицы нельзя удалить пока к ней привязаны
+строки из зависимой таблицы
+
+// CASCADE 
+- при удалении строки из главной таблицы, удалятся
+и строки из зависимой таблицы
+CREATE TABLE customers7 // главная таблица
+(
+Id SERIAL PRIMARY KEY,
+FirstName CHARACTER VARYING(30),
+Super Real,
+Age INTEGER DEFAULT 18,
+CONSTRAINT chek_age CHECK(Age > 0 AND Age < 100),
+CONSTRAINT check_FN CHECK (FirstName !='')
+);
+CREATE TABLE customers9 // зависимая таблица
+(
+Id SERIAL PRIMARY KEY,
+CustomId INTEGER REFERENCES customers7 (Id) ON DELETE CASCADE,
+Quanti INTEGER
+);
+
+// SET NULL 
+- при удалении строки из главной таблицы значение внешнего ключа
+станет NULL
+CREATE TABLE customers10 // зависимая таблица
+(
+Id SERIAL PRIMARY KEY,
+CustomId INTEGER REFERENCES customers7 (Id) ON DELETE SET NULL,
+Quanti INTEGER
+); 
+
+// 
+- при удалении строки из главной таблицы значение внешнего ключа
+станет значение по умолчанию, если не установлено - NULL
+CREATE TABLE customers1 // зависимая таблица
+(
+Id SERIAL PRIMARY KEY,
+CustomId INTEGER REFERENCES customers7 (Id) ON DELETE SET DEFAULT,
+Quanti INTEGER
+);
+
+// Изменение таблиц
+// Добавление нового столбца в таблицу customers1
+ALTER TABLE customers1
+ADD Phone CHARACTER VARYING(20) NULL; 
+// если в таблице есть данные, то у добавленного столбца 
+будет значение NULL
+
+// но если пустого значения не должно быть, то можно задать 
+значение по умолчанию
+ALTER TABLE customers1
+ADD Adress CHARACTER VARYING(20) NOT NULL DEFAULT 'Неизвестно';
+
+// Удаление столбца
+ALTER TABLE customers1
+DROP COLUMN Phone
+
+// Изменение типа столбца
+ALTER TABLE customers1
+ALTER COLUMN Adress TYPE VARCHAR(50); 
+
+//VARCHAR(50) (он же VARYING CHARACTER(50))
+
+// Изменение ограничений столбца
+ALTER TABLE Customers1
+ALTER COLUMN quanti
+SET NOT NULL; // не должен быть NULL
+
+// удаление ограничения
+ALTER TABLE Customers1
+ALTER COLUMN quanti
+DROP NOT NULL;
+
+// Изменение ограничений таблицы
+ALTER TABLE customers1
+ADD CHECK (quanti > 0);
+
+// добавили ограничение с именем
+ALTER TABLE customers1
+ADD CONSTRAINT quanti_unique UNIQUE (quanti);
+
+// удаление ограничения
+ALTER TABLE customers1
+DROP CONSTRAINT quanti_unique;
+// имя ограничения задаётся само
+
+// переименование столбца
+ALTER TABLE customers1
+RENAME COLUMN adress TO City;
+
+// переименование таблицы
+ALTER TABLE customers1
+RENAME TO customers11;
