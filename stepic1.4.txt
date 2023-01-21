@@ -1,0 +1,140 @@
+CREATE TABLE fine
+(
+    fine_id        INT PRIMARY KEY GENERATED ALWAYS AS identity,
+    name           TEXT,
+    number_plate   TEXT,
+    violation      TEXT,
+    sum_fine       DECIMAL(8, 2),
+    date_violation DATE,
+    date_payment   DATE
+);
+
+INSERT INTO fine (name, number_plate, violation, sum_fine, date_violation, date_payment)
+VALUES ('Баранов П.Е.', 'P523BT', 'Превышение скорости(от 40 до 60)', NULL, '2020-02-14 ', NULL),
+       ('Абрамова К.А.', 'О111AB', 'Проезд на запрещающий сигнал', NULL, '2020-02-23', NULL),
+       ('Яковлев Г.Р.', 'T330TT', 'Проезд на запрещающий сигнал', NULL, '2020-03-03', NULL),
+       ('Баранов П.Е.', 'P523BT', 'Превышение скорости(от 40 до 60)', 500.00, '2020-01-12', '2020-01-17'),
+       ('Абрамова К.А.', 'О111AB', 'Проезд на запрещающий сигнал', 1000.00, '2020-01-14', '2020-02-27'),
+       ('Яковлев Г.Р.', 'T330TT', 'Превышение скорости(от 20 до 40)', 500.00, '2020-01-23', '2020-02-23'),
+       ('Яковлев Г.Р.', 'M701AA', 'Превышение скорости(от 20 до 40)', NULL, '2020-01-12', NULL),
+       ('Колесов С.П.', 'K892AX', 'Превышение скорости(от 20 до 40)', NULL, '2020-02-01', NULL);
+
+CREATE TABLE traffic_violation
+(
+    violation_id INT PRIMARY KEY GENERATED ALWAYS AS identity,
+    violation    TEXT,
+    sum_fine     DECIMAL(8, 2)
+);
+
+INSERT INTO traffic_violation (violation, sum_fine)
+VALUES ('Превышение скорости(от 20 до 40)', 500),
+       ('Превышение скорости(от 40 до 60)', 1000),
+       ('Проезд на запрещающий сигнал', 1000);
+
+Для тех, кто уже оплатил штраф, вывести информацию о том, 
+изменялась ли стандартная сумма штрафа.
+
+select f.name, f.number_plate, f.violation,
+       case when f.sum_fine = tv.sum_fine then 'Стандартная сумма штрафа'
+            when f.sum_fine < tv.sum_fine then 'Уменьшенная сумма штрафа'
+            when f.sum_fine > tv.sum_fine then 'Увеличенная сумма штрафа' end as description
+from fine f, traffic_violation tv
+where f.violation = tv.violation and f.sum_fine is not null;
+
+В таблице fine увеличить в два раза сумму неоплаченных штрафов 
+для отобранных на предыдущем шаге записей. 
+
+update fine f2
+set sum_fine = f2.sum_fine * 2
+from (select f.name, f.number_plate, f.violation
+      from fine f
+      group by f.name, f.number_plate, f.violation
+      having count(f.name) > 1
+      order by f.name, f.number_plate, f.violation) as n
+where f2.date_payment is null
+and f2.name = n.name
+and f2.number_plate = n.number_plate
+and f2.violation = n.violation;
+
+update fine f2
+set sum_fine = f2.sum_fine * 2
+from (select f.name, f.number_plate, f.violation
+      from fine f
+      group by f.name, f.number_plate, f.violation
+      having count(f.name) > 1
+      order by f.name, f.number_plate, f.violation) as n
+where f2.date_payment is null
+  and f2.name in (n.name)
+  and f2.number_plate in (n.number_plate)
+  and f2.violation in (n.violation);
+
+update fine f2
+set sum_fine = f2.sum_fine * 2
+from (select f.name, f.number_plate, f.violation
+      from fine f
+      group by f.name, f.number_plate, f.violation
+      having count(f.name) > 1
+      order by f.name, f.number_plate, f.violation) as n
+where f2.date_payment is null
+  and (f2.name, f2.number_plate, f2.violation) 
+                                = (n.name, n.number_plate, n.violation);
+
+добавление через with
+
+with n as (select f.name, f.number_plate, f.violation
+           from fine f
+           group by f.name, f.number_plate, f.violation
+           having count(f.name) > 1
+           order by f.name, f.number_plate, f.violation)
+update fine f2
+set sum_fine = f2.sum_fine * 2
+from n
+where f2.date_payment is null
+  and (f2.name, f2.number_plate, f2.violation) 
+                                = (n.name, n.number_plate, n.violation);
+
+CREATE TABLE payment
+(
+    payment_id INT PRIMARY KEY GENERATED ALWAYS AS identity,
+    name           TEXT,
+    number_plate   TEXT,
+    violation      TEXT,
+    date_violation DATE,
+    date_payment DATE
+);
+
+INSERT INTO payment (name, number_plate, violation, date_violation, date_payment)
+VALUES
+    ('Яковлев Г.Р.', 'M701AA', 'Превышение скорости(от 20 до 40)', '2020-01-12', '2020-01-22'),
+    ('Баранов П.Е.', 'P523BT', 'Превышение скорости(от 40 до 60)', '2020-02-14', '2020-03-06'),
+    ('Яковлев Г.Р.', 'T330TT', 'Проезд на запрещающий сигнал', '2020-03-03', '2020-03-23');
+
+Необходимо:
+в таблицу fine занести дату оплаты соответствующего штрафа из таблицы payment; 
+уменьшить начисленный штраф в таблице fine в два раза  (только для тех штрафов, 
+информация о которых занесена в таблицу payment), 
+если оплата произведена не позднее 20 дней со дня нарушения.
+
+update fine f
+set date_payment = p.date_payment,
+    sum_fine = case when (p.date_payment - f.date_violation) <= 20 then f.sum_fine / 2 else f.sum_fine end
+from payment p
+where f.date_payment is null
+and (f.name, f.number_plate, f.violation, f.date_violation)
+        = (p.name, p.number_plate, p.violation, p.date_violation);
+
+Создать новую таблицу back_payment, куда внести информацию о неоплаченных 
+штрафах (Фамилию и инициалы водителя, номер машины, нарушение, сумму штрафа  
+и  дату нарушения) из таблицы fine.
+
+create table back_payment as
+      select name, number_plate, violation, sum_fine, date_violation
+      from fine
+      where date_payment is null;
+
+Удалить из таблицы fine информацию о нарушениях, 
+совершенных раньше 1 февраля 2020 года. 
+
+delete from fine
+where date_violation < '2020-02-01';
+
