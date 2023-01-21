@@ -130,7 +130,7 @@ ProductCount INTEGER DEFAULT 0,
 Price NUMERIC
 );
 INSERT INTO prod (Manufacturer, Price, ProductName, ProductCount)
-VALUES('Samsung', 650, 'Gelaxi 6', 6)
+VALUES('Samsung', 650, 'Gelaxi 6', 6);
 VALUES('Samsung', 250, 'Gelaxi 4s', 10);
 INSERT INTO prod (Manufacturer, Price, ProductName, ProductCount)
 VALUES ('Apple', 1000, 'iPhone12', 8) RETURNING id;
